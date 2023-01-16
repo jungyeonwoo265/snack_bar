@@ -229,7 +229,7 @@ color:white;
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap>../../Desktop/분식.JPG</pixmap>
+      <pixmap>분식.JPG</pixmap>
      </property>
     </widget>
     <zorder>label_21</zorder>
@@ -1028,7 +1028,7 @@ color:white;
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>../../Desktop/일반김밥.JPG</normaloff>../../Desktop/일반김밥.JPG</iconset>
+       <normaloff>일반김밥.JPG</normaloff>일반김밥.JPG</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -1051,7 +1051,7 @@ color:white;
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>../../Desktop/참치김밥.JPG</normaloff>../../Desktop/참치김밥.JPG</iconset>
+       <normaloff>참치김밥.JPG</normaloff>참치김밥.JPG</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -1074,7 +1074,7 @@ color:white;
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>../../Desktop/치즈김밥.JPG</normaloff>../../Desktop/치즈김밥.JPG</iconset>
+       <normaloff>치즈김밥.JPG</normaloff>치즈김밥.JPG</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -1097,7 +1097,7 @@ color:white;
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>../../Desktop/떡볶이.JPG</normaloff>../../Desktop/떡볶이.JPG</iconset>
+       <normaloff>떡볶이사진.JPG</normaloff>떡볶이사진.JPG</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -1120,7 +1120,7 @@ color:white;
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>../../Desktop/라볶이.JPG</normaloff>../../Desktop/라볶이.JPG</iconset>
+       <normaloff>라볶이.JPG</normaloff>라볶이.JPG</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -1143,7 +1143,7 @@ color:white;
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>../../Desktop/돼지찌개.JPG</normaloff>../../Desktop/돼지찌개.JPG</iconset>
+       <normaloff>돼지찌개.JPG</normaloff>돼지찌개.JPG</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -1166,7 +1166,7 @@ color:white;
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>../../Desktop/참치찌개.JPG</normaloff>../../Desktop/참치찌개.JPG</iconset>
+       <normaloff>참치찌개.JPG</normaloff>참치찌개.JPG</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -1189,7 +1189,7 @@ color:white;
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>../../Desktop/치즈떡볶이1.jpg</normaloff>../../Desktop/치즈떡볶이1.jpg</iconset>
+       <normaloff>치즈떡볶이1.jpg</normaloff>치즈떡볶이1.jpg</iconset>
      </property>
      <property name="iconSize">
       <size>
