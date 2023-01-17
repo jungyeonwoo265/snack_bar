@@ -20,7 +20,7 @@ class WindowClass(QMainWindow, snack_bar) :
         self.manager_question.clicked.connect(self.manager_page)
         self.manager_question.clicked.connect(self.manager_page)
         self.manager_inventory.clicked.connect(self.manager_page)
-        self.payment_cancle_button.clicked.connect(self.homepage)
+        # self.payment_cancle_button.clicked.connect(self.homepage)
         self.salesback_button.clicked.connect(self.homepage)
         self.question_button.clicked.connect(self.question)
         self.shopping_button.clicked.connect(self.shopping_basket)
@@ -94,22 +94,25 @@ class WindowClass(QMainWindow, snack_bar) :
         self.login_okay = False
         self.stackedWidget.setCurrentIndex(1)
 
+
     # 로그인후 가장 먼저 보이는 메뉴 창
     def mainpage(self):
         conn = pymysql.connect(host='localhost', user='root', password='qwer1234', db='test165', charset='utf8')
         cur = conn.cursor()
-        cur.execute(f'SELECT * FROM user WHERE 아이디 = "{self.lineEdit.text()}" and 비밀번호 = "{self.lineEdit_2.text()}"')
+        cur.execute(f'SELECT 아이디, `사업자 여부` FROM user WHERE 아이디 = "{self.lineEdit.text()}" and 비밀번호 = "{self.lineEdit_2.text()}"')
         login_infor = cur.fetchall()
         conn.close()
         print(login_infor)
         if login_infor == ():
             QMessageBox.critical(self, "에러", "아이디나 비밀번호가 틀립니다.")
         else:
-            self.logined = True
-            if login_infor[0][5] == '개인':
+            if login_infor[0][1] == '개인':
                 self.stackedWidget.setCurrentIndex(2)
-            elif login_infor[0][5] == '사업자':
+            elif login_infor[0][1] == '사업자':
                 self.stackedWidget.setCurrentIndex(7)
+
+    # def menu_counting(self):
+    #     if self.kimbap_plus.clicked.connect(self.)
 
     # 문의하기 게시판
     def question(self):
