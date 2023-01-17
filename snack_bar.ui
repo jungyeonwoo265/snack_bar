@@ -32,7 +32,7 @@
     <string notr="true"/>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>8</number>
    </property>
    <widget class="QWidget" name="page">
     <widget class="QLabel" name="label">
@@ -301,6 +301,10 @@ color:white;
        <height>20</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">border-style: solid;
+</string>
+     </property>
     </widget>
     <widget class="QLabel" name="label_5">
      <property name="geometry">
@@ -329,6 +333,10 @@ color:white;
        <width>131</width>
        <height>20</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-style: solid;
+</string>
      </property>
     </widget>
     <widget class="QPushButton" name="overlap_button">
@@ -378,6 +386,10 @@ color:white;
        <height>20</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">border-style: solid;
+</string>
+     </property>
     </widget>
     <widget class="QLabel" name="label_7">
      <property name="geometry">
@@ -406,6 +418,10 @@ color:white;
        <width>131</width>
        <height>20</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-style: solid;
+</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_8">
@@ -436,6 +452,10 @@ color:white;
        <height>20</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">border-style: solid;
+</string>
+     </property>
     </widget>
     <widget class="QLabel" name="label_9">
      <property name="geometry">
@@ -464,6 +484,10 @@ color:white;
        <width>131</width>
        <height>20</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-style: solid;
+</string>
      </property>
     </widget>
     <widget class="QPushButton" name="signup_confirm_button">
@@ -1859,14 +1883,54 @@ color:white;
       <string>  문의함 확인하기</string>
      </property>
     </widget>
-    <widget class="QListView" name="listView">
+    <widget class="QTableWidget" name="tableWidget">
      <property name="geometry">
       <rect>
        <x>40</x>
-       <y>80</y>
+       <y>70</y>
        <width>831</width>
-       <height>451</height>
+       <height>391</height>
       </rect>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit_3">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>490</y>
+       <width>731</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-style: solid;
+</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="manager_sales_2">
+     <property name="geometry">
+      <rect>
+       <x>770</x>
+       <y>490</y>
+       <width>101</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>경기천년바탕 Bold</family>
+       <pointsize>14</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:rgb(255,187,0);
+color:white;
+border-style: solid;
+
+</string>
+     </property>
+     <property name="text">
+      <string>답변달기</string>
      </property>
     </widget>
    </widget>
