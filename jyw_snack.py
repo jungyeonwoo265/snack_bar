@@ -91,7 +91,7 @@ class WindowClass(QMainWindow, snack_bar):
             self.stackedWidget.setCurrentIndex(0)
 
     def double_check(self):
-        self.db_open()
+        self.open_db()
         self.c.execute(f'SELECT 아이디 FROM user WHERE 아이디 = "{self.id_check.text()}"')
         checking = self.c.fetchall()
         self.conn.close()
@@ -135,12 +135,14 @@ class WindowClass(QMainWindow, snack_bar):
         self.c.execute("SELECT * from snack.question")
         questionlist = self.c.fetchall()
         print(questionlist)
-        self.QandA_list.setRowCount(len(questionlist))
-        self.QandA_list.setColumnCount(len(questionlist[0]))
-        self.QandA_list.setHorizontalHeaderLabels(['주문번호', '아이디', '내용', '시간', '답변'])
-        for i in range(len(questionlist)):
-            for j in range(len(questionlist[i])):
-                self.QandA_list.setItem(i, j, QTableWidgetItem(str(questionlist[i][j])))
+        # 문의가 있을경우
+        if questionlist:
+            self.QandA_list.setRowCount(len(questionlist))
+            self.QandA_list.setColumnCount(len(questionlist[0]))
+            self.QandA_list.setHorizontalHeaderLabels(['주문번호', '아이디', '내용', '시간', '답변'])
+            for i in range(len(questionlist)):
+                for j in range(len(questionlist[i])):
+                    self.QandA_list.setItem(i, j, QTableWidgetItem(str(questionlist[i][j])))
         self.conn.close()
 
     def question_add(self):
@@ -169,17 +171,27 @@ class WindowClass(QMainWindow, snack_bar):
     def inventory_view(self):
         self.stackedWidget.setCurrentIndex(4)
 
+    # 식재료 자동 구매 기능
     def ordering(self):
         self.open_db()
         self.c.execute(
-            f'select a.재료, if(max(a.수량) > min(b.수량), "구매", "보류"), min(b.단가) from bom a left join inventory b on a.재료 = b.재료 group by 재료;')
+            f'select a.재료, if(max(a.수량) > min(b.수량), "구매", "보류"), min(b.단가) '
+            f'from bom a left join inventory b on a.재료 = b.재료 group by 재료;')
         article = self.c.fetchall()
         article_list = list()
+        # 재료 구매 list 작성 및 재료 구매 쿼리문 작성
         for i in article:
             if i[1] == '구매':
                 self.c.execute(f'update inventory set 수량 = 수량 + 구매량 where 재료 ="{i[0]}";')
                 article_list.append([i[0], i[2]])
-        print(article_list)
+                self.conn.commit()
+        # 재무표에 구매 list 추가
+        if article_list:
+            for i in article_list:
+                self.c.execute(f'SELECT 주문번호, 잔액 FROM finance order by 주문번호 desc;')
+                fin = self.c.fetchone()
+                self.c.execute(f'insert into finance values("{fin[0]+1}","{i[0]}구매",0,{i[1]},{fin[1]-i[1]},now());')
+                self.conn.commit()
         self.conn.close()
 
     # 장바구니
