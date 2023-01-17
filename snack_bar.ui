@@ -25,14 +25,14 @@
    <property name="font">
     <font>
      <family>경기천년바탕 Regular</family>
-     <pointsize>11</pointsize>
+     <pointsize>13</pointsize>
     </font>
    </property>
    <property name="styleSheet">
     <string notr="true"/>
    </property>
    <property name="currentIndex">
-    <number>3</number>
+    <number>2</number>
    </property>
    <widget class="QWidget" name="page">
     <widget class="QLabel" name="label">
@@ -573,48 +573,26 @@ color:white;
      <property name="geometry">
       <rect>
        <x>710</x>
-       <y>530</y>
-       <width>75</width>
-       <height>41</height>
+       <y>520</y>
+       <width>161</width>
+       <height>51</height>
       </rect>
      </property>
      <property name="font">
       <font>
        <family>경기천년바탕 Bold</family>
-       <pointsize>12</pointsize>
+       <pointsize>18</pointsize>
       </font>
      </property>
      <property name="styleSheet">
       <string notr="true">background-color:rgb(255,187,0);
 border-style: solid;
+
+color:white;
 </string>
      </property>
      <property name="text">
       <string>장바구니</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="cancle_button">
-     <property name="geometry">
-      <rect>
-       <x>800</x>
-       <y>530</y>
-       <width>75</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>경기천년바탕 Bold</family>
-       <pointsize>12</pointsize>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color:rgb(255,187,0);
-border-style: solid;
-</string>
-     </property>
-     <property name="text">
-      <string>돌아가기</string>
      </property>
     </widget>
     <widget class="QPushButton" name="kimbap_minus">
@@ -1023,7 +1001,7 @@ border-style: solid;
       <rect>
        <x>50</x>
        <y>0</y>
-       <width>831</width>
+       <width>661</width>
        <height>51</height>
       </rect>
      </property>
@@ -1230,7 +1208,7 @@ color:white;
      <property name="geometry">
       <rect>
        <x>710</x>
-       <y>460</y>
+       <y>450</y>
        <width>161</width>
        <height>51</height>
       </rect>
@@ -1356,23 +1334,39 @@ color:white;
       <string>11600원</string>
      </property>
     </widget>
-   </widget>
-   <widget class="QWidget" name="page_4">
-    <widget class="QLineEdit" name="question_line">
+    <widget class="QPushButton" name="logout_main_button">
      <property name="geometry">
       <rect>
-       <x>60</x>
-       <y>100</y>
-       <width>321</width>
-       <height>41</height>
+       <x>720</x>
+       <y>0</y>
+       <width>151</width>
+       <height>51</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>경기천년바탕 Bold</family>
+       <pointsize>16</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:rgb(255,187,0);
+border-style: solid;
+
+color:white;
+</string>
+     </property>
+     <property name="text">
+      <string>로그아웃</string>
+     </property>
     </widget>
+   </widget>
+   <widget class="QWidget" name="page_4">
     <widget class="QPushButton" name="question_add_button">
      <property name="geometry">
       <rect>
-       <x>700</x>
-       <y>460</y>
+       <x>710</x>
+       <y>530</y>
        <width>75</width>
        <height>41</height>
       </rect>
@@ -1395,8 +1389,8 @@ border-style: solid;
     <widget class="QPushButton" name="question_cancle_button">
      <property name="geometry">
       <rect>
-       <x>800</x>
-       <y>460</y>
+       <x>810</x>
+       <y>530</y>
        <width>75</width>
        <height>41</height>
       </rect>
@@ -1437,16 +1431,26 @@ color:white;
 </string>
      </property>
      <property name="text">
-      <string>   문의하기</string>
+      <string>   묻고 답하기</string>
      </property>
     </widget>
-    <widget class="QListWidget" name="listWidget">
+    <widget class="QTextEdit" name="textEdit">
      <property name="geometry">
       <rect>
-       <x>60</x>
-       <y>160</y>
-       <width>781</width>
-       <height>192</height>
+       <x>50</x>
+       <y>80</y>
+       <width>661</width>
+       <height>161</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QTableWidget" name="QandA_list">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>250</y>
+       <width>841</width>
+       <height>271</height>
       </rect>
      </property>
     </widget>
@@ -1803,6 +1807,32 @@ border-style: solid;
       </rect>
      </property>
     </widget>
+    <widget class="QPushButton" name="logout_manager_button">
+     <property name="geometry">
+      <rect>
+       <x>730</x>
+       <y>0</y>
+       <width>151</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>경기천년바탕 Bold</family>
+       <pointsize>16</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:rgb(255,187,0);
+border-style: solid;
+
+color:white;
+</string>
+     </property>
+     <property name="text">
+      <string>로그아웃</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="page_9">
     <widget class="QLabel" name="label_39">
@@ -1858,9 +1888,7 @@ color:white;
   <tabstop>lineEdit_2</tabstop>
   <tabstop>kimbap_plus</tabstop>
   <tabstop>shopping_button</tabstop>
-  <tabstop>cancle_button</tabstop>
   <tabstop>kimbap_minus</tabstop>
-  <tabstop>question_line</tabstop>
   <tabstop>question_add_button</tabstop>
   <tabstop>question_cancle_button</tabstop>
   <tabstop>inventorylist</tabstop>
