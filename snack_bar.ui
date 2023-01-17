@@ -32,7 +32,7 @@
     <string notr="true"/>
    </property>
    <property name="currentIndex">
-    <number>5</number>
+    <number>8</number>
    </property>
    <widget class="QWidget" name="page">
     <widget class="QLabel" name="label">
