@@ -4,10 +4,10 @@ from PyQt5 import uic
 import pymysql
 import datetime as dt
 
-
 snack_bar = uic.loadUiType("snack_bar.ui")[0]
 
-class WindowClass(QMainWindow, snack_bar) :
+
+class WindowClass(QMainWindow, snack_bar):
     def __init__(self) :
         super().__init__()
         self.setupUi(self)
@@ -30,8 +30,10 @@ class WindowClass(QMainWindow, snack_bar) :
         self.salesback_button.clicked.connect(self.mainpage)
         self.signup_confirm_button.clicked.connect(self.signup)
         self.manager_inventory.clicked.connect(self.question)
+
         self.logout_main_button.clicked.connect(self.homepage)
         self.logout_manager_button.clicked.connect(self.homepage)
+
 
 
     # 홈페이지 첫화면
@@ -187,7 +189,6 @@ class WindowClass(QMainWindow, snack_bar) :
     # 관리자 문의함확인하기
     def question_view(self):
         self.stackedWidget.setCurrentIndex(8)
-
 
 
 if __name__ == "__main__" :

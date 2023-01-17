@@ -26,16 +26,17 @@ class WindowClass(QMainWindow, snack_bar):
         self.question_cancle_button.clicked.connect(self.mainpage)
         self.back_button.clicked.connect(self.manager_page)
         self.manager_question.clicked.connect(self.manager_page)
-        self.manager_question.clicked.connect(self.manager_page)
         self.manager_inventory.clicked.connect(self.manager_page)
-        # self.payment_cancle_button.clicked.connect(self.homepage)
-        self.salesback_button.clicked.connect(self.homepage)
+        self.salesback_button.clicked.connect(self.manager_page)
+        self.payment_cancle_button.clicked.connect(self.mainpage)
         self.question_button.clicked.connect(self.question)
         self.shopping_button.clicked.connect(self.shopping_basket)
         self.payment_cancle_button.clicked.connect(self.mainpage)
         self.salesback_button.clicked.connect(self.mainpage)
         self.signup_confirm_button.clicked.connect(self.signup)
-        self.manager_inventory.clicked.connect(self.question)
+        self.manager_question.clicked.connect(self.question_view)
+        self.manager_inventory.clicked.connect(self.inventory_view)
+        self.manager_sales.clicked.connect(self.sales_view)
         self.overlap_button.clicked.connect(self.double_check)
         self.logout_main_button.clicked.connect(self.homepage)
         self.logout_manager_button.clicked.connect(self.homepage)
@@ -169,7 +170,23 @@ class WindowClass(QMainWindow, snack_bar):
 
     # 관리자 재고확인하기
     def inventory_view(self):
+        self.show_inventory()
         self.stackedWidget.setCurrentIndex(4)
+
+    # 재고 보여주기
+    def show_inventory(self):
+        head =['재료', '수량', '단위']
+        self.open_db()
+        self.c.execute(f"select 재료,수량,단위 from inventory;")
+        inven = self.c.fetchall()
+        self.inventorylist.setRowCount(len(inven))
+        self.inventorylist.setColumnCount(len(inven[0]))
+        for i, le in enumerate(inven):
+            for j, v in enumerate(le):
+                self.inventorylist.setItem(i, j, QTableWidgetItem(str(v)))
+        for i, v in enumerate(head):
+            self.inventorylist.setHorizontalHeaderItem(i, QTableWidgetItem(v))
+        self.conn.close()
 
     # 식재료 자동 구매 기능
     def ordering(self):
