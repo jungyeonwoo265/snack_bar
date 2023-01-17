@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>941</width>
-    <height>603</height>
+    <height>611</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,7 +32,7 @@
     <string notr="true"/>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>5</number>
    </property>
    <widget class="QWidget" name="page">
     <widget class="QLabel" name="label">
@@ -541,9 +541,9 @@ color:white;
     <widget class="QLabel" name="label_38">
      <property name="geometry">
       <rect>
-       <x>50</x>
+       <x>40</x>
        <y>0</y>
-       <width>831</width>
+       <width>841</width>
        <height>51</height>
       </rect>
      </property>
@@ -629,9 +629,9 @@ color:white;
     <widget class="QLabel" name="label_33">
      <property name="geometry">
       <rect>
-       <x>50</x>
+       <x>40</x>
        <y>0</y>
-       <width>661</width>
+       <width>671</width>
        <height>51</height>
       </rect>
      </property>
@@ -837,7 +837,7 @@ color:white;
     <widget class="QPushButton" name="question_button">
      <property name="geometry">
       <rect>
-       <x>30</x>
+       <x>50</x>
        <y>520</y>
        <width>161</width>
        <height>51</height>
@@ -1171,9 +1171,9 @@ border-style: solid;
     <widget class="QLabel" name="label_34">
      <property name="geometry">
       <rect>
-       <x>50</x>
+       <x>40</x>
        <y>0</y>
-       <width>831</width>
+       <width>841</width>
        <height>51</height>
       </rect>
      </property>
@@ -1254,9 +1254,9 @@ border-style: solid;
     <widget class="QLabel" name="label_35">
      <property name="geometry">
       <rect>
-       <x>50</x>
+       <x>40</x>
        <y>0</y>
-       <width>831</width>
+       <width>841</width>
        <height>51</height>
       </rect>
      </property>
@@ -1398,9 +1398,9 @@ border-style: solid;
     <widget class="QLabel" name="label_36">
      <property name="geometry">
       <rect>
-       <x>50</x>
+       <x>40</x>
        <y>0</y>
-       <width>831</width>
+       <width>841</width>
        <height>51</height>
       </rect>
      </property>
@@ -1419,14 +1419,40 @@ color:white;
       <string>   장바구니</string>
      </property>
     </widget>
+    <widget class="QLabel" name="label_13">
+     <property name="geometry">
+      <rect>
+       <x>260</x>
+       <y>520</y>
+       <width>56</width>
+       <height>12</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="bill_result">
+     <property name="geometry">
+      <rect>
+       <x>260</x>
+       <y>520</y>
+       <width>121</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="page_7">
     <widget class="QLabel" name="label_37">
      <property name="geometry">
       <rect>
-       <x>50</x>
+       <x>40</x>
        <y>0</y>
-       <width>831</width>
+       <width>841</width>
        <height>51</height>
       </rect>
      </property>
@@ -1448,9 +1474,9 @@ color:white;
     <widget class="QWidget" name="verticalLayoutWidget">
      <property name="geometry">
       <rect>
-       <x>50</x>
+       <x>40</x>
        <y>270</y>
-       <width>831</width>
+       <width>841</width>
        <height>271</height>
       </rect>
      </property>
@@ -1459,9 +1485,9 @@ color:white;
     <widget class="QListWidget" name="listWidget_2">
      <property name="geometry">
       <rect>
-       <x>50</x>
+       <x>40</x>
        <y>60</y>
-       <width>831</width>
+       <width>841</width>
        <height>192</height>
       </rect>
      </property>
@@ -1583,7 +1609,7 @@ border-style: solid;
     <widget class="QPushButton" name="logout_manager_button">
      <property name="geometry">
       <rect>
-       <x>730</x>
+       <x>720</x>
        <y>0</y>
        <width>151</width>
        <height>51</height>
@@ -1592,7 +1618,7 @@ border-style: solid;
      <property name="font">
       <font>
        <family>경기천년바탕 Bold</family>
-       <pointsize>16</pointsize>
+       <pointsize>20</pointsize>
       </font>
      </property>
      <property name="styleSheet">
@@ -1613,7 +1639,7 @@ color:white;
       <rect>
        <x>40</x>
        <y>0</y>
-       <width>831</width>
+       <width>681</width>
        <height>51</height>
       </rect>
      </property>
@@ -1632,21 +1658,21 @@ color:white;
       <string>  문의함 확인하기</string>
      </property>
     </widget>
-    <widget class="QTableWidget" name="tableWidget">
+    <widget class="QTableWidget" name="manager_question_view">
      <property name="geometry">
       <rect>
        <x>40</x>
-       <y>70</y>
+       <y>120</y>
        <width>831</width>
        <height>391</height>
       </rect>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_3">
+    <widget class="QLineEdit" name="manager_line_add">
      <property name="geometry">
       <rect>
        <x>40</x>
-       <y>490</y>
+       <y>520</y>
        <width>731</width>
        <height>41</height>
       </rect>
@@ -1656,11 +1682,11 @@ color:white;
 </string>
      </property>
     </widget>
-    <widget class="QPushButton" name="manager_sales_2">
+    <widget class="QPushButton" name="manager_sales_add">
      <property name="geometry">
       <rect>
        <x>770</x>
-       <y>490</y>
+       <y>520</y>
        <width>101</width>
        <height>41</height>
       </rect>
@@ -1680,6 +1706,58 @@ border-style: solid;
      </property>
      <property name="text">
       <string>답변달기</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="manager_sales_del">
+     <property name="geometry">
+      <rect>
+       <x>780</x>
+       <y>70</y>
+       <width>91</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>경기천년바탕 Bold</family>
+       <pointsize>14</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:rgb(255,187,0);
+color:white;
+border-style: solid;
+
+</string>
+     </property>
+     <property name="text">
+      <string>삭제하기</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="logout_manager_button_3">
+     <property name="geometry">
+      <rect>
+       <x>730</x>
+       <y>0</y>
+       <width>141</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>경기천년바탕 Bold</family>
+       <pointsize>20</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:rgb(255,187,0);
+border-style: solid;
+
+color:white;
+</string>
+     </property>
+     <property name="text">
+      <string>메인으로</string>
      </property>
     </widget>
    </widget>
