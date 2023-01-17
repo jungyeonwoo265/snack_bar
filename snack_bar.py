@@ -3,14 +3,13 @@ from PyQt5.QtWidgets import *
 from PyQt5 import uic
 import pymysql
 import datetime as dt
-
 import pymysql as p
 import datetime as dt
 
 snack_bar = uic.loadUiType("snack_bar.ui")[0]
 
 # db 연결용 정보
-hos = '127.0.0.1'
+hos = 'localhost'
 por = 3306
 use = 'root'
 pw = '0000'
@@ -80,8 +79,7 @@ class WindowClass(QMainWindow, snack_bar):
             QMessageBox.critical(self, "에러", "중복확인을 해주세요")
         elif bool(self.buyer_Confirm_button.isChecked()) == False and bool(
                 self.seller_Confirm_button.isChecked()) == False:
-        elif bool(self.buyer_Confirm_button.isChecked()) == False and\
-                bool(self.seller_Confirm_button.isChecked()) == False:
+
             QMessageBox.critical(self, "에러", "사업자 또는 개인 선택해주세요")
         else:
             information = 'a'
@@ -129,8 +127,6 @@ class WindowClass(QMainWindow, snack_bar):
     def mainpage(self):
         self.open_db()
         self.c.execute(f'SELECT * FROM user WHERE 아이디 = "{self.lineEdit.text()}" and 비밀번호 = "{self.lineEdit_2.text()}"')
-        self.c.execute(f'SELECT 아이디, `사업자 여부` FROM user WHERE '
-                       f'아이디 = "{self.lineEdit.text()}" and 비밀번호 = "{self.lineEdit_2.text()}"')
         self.login_infor = self.c.fetchall()
         self.conn.close()
         print(self.login_infor)
@@ -210,23 +206,26 @@ class WindowClass(QMainWindow, snack_bar):
 
     def question_add(self):
         self.time = dt.datetime.now()
+        self.today = self.time.strftime('%Y-%m-%d %H:%M:%S')
         check = QMessageBox.question(self, ' ', '등록 하겠습니까?', QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
         if check == QMessageBox.Yes:
             QMessageBox.information(self, ' ', '문의가 등록되었습니다.')
             self.open_db()
-            self.c.execute(
-                f"insert into snack.question (아이디,내용,시간) values"
-                f" ('{self.id_check.text()}','{self.QandA_lineEdit.text()}','{self.time}')")
-            questionlist = self.c.fetchall()
+            self.c.execute(f"insert into snack.question (아이디,내용,시간) values ('{self.login_infor[0][0]}','{self.QandA_lineEdit.text()}','{self.today}')")
             self.conn.commit()
-            print(questionlist)
-            self.QandA_list.setRowCount(len(questionlist))
-            self.QandA_list.setColumnCount(len(questionlist[0]))
-            self.QandA_list.setHorizontalHeaderLabels(['주문번호', '아이디', '내용', '시간', '답변'])
-            for i in range(len(questionlist)):
-                for j in range(len(questionlist[i])):
-                    self.QandA_list.setItem(i, j, QTableWidgetItem(str(questionlist[i][j])))
+            self.c.execute("SELECT * from snack.question")
+            self.questionlist = self.c.fetchall()
+            print(self.questionlist)
             self.conn.close()
+
+            self.QandA_list.setRowCount(len(self.questionlist))
+            self.QandA_list.setColumnCount(len(self.questionlist[0]))
+            self.QandA_list.setHorizontalHeaderLabels(['주문번호', '아이디', '내용', '시간', '답변'])
+            for i in range(len(self.questionlist)):
+                for j in range(len(self.questionlist[i])):
+                    self.QandA_list.setItem(i, j, QTableWidgetItem(str(self.questionlist[i][j])))
+            self.QandA_list.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+            QMessageBox.information(self, ' ', '문의가 등록되었습니다.')
         else:
             QMessageBox.information(self, ' ', '상품주문으로 돌아갑니다.')
 
