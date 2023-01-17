@@ -4,10 +4,10 @@ from PyQt5 import uic
 import pymysql
 import datetime as dt
 
-
 snack_bar = uic.loadUiType("snack_bar.ui")[0]
 
-class WindowClass(QMainWindow, snack_bar) :
+
+class WindowClass(QMainWindow, snack_bar):
     def __init__(self) :
         super().__init__()
         self.setupUi(self)
@@ -30,6 +30,7 @@ class WindowClass(QMainWindow, snack_bar) :
         self.salesback_button.clicked.connect(self.mainpage)
         self.signup_confirm_button.clicked.connect(self.signup)
         self.manager_inventory.clicked.connect(self.question)
+
         self.logout_main_button.clicked.connect(self.homepage)
         self.logout_manager_button.clicked.connect(self.homepage)
         self.manager_question.clicked.connect(self.question_view)
@@ -38,6 +39,7 @@ class WindowClass(QMainWindow, snack_bar) :
         self.manager_question_view.cellDoubleClicked.connect(self.cellclicked_event)
         self.manager_sales_add.clicked.connect(self.manager_question_add)
         self.logout_manager_button_3.clicked.connect(self.manager_page)
+
 
 
 
@@ -258,7 +260,6 @@ class WindowClass(QMainWindow, snack_bar) :
         self.data = self.manager_question_view.item(row,col)
         self.cellchoice = self.data.text()
         print(self.cellchoice)
-
 
 if __name__ == "__main__" :
     app = QApplication(sys.argv)
