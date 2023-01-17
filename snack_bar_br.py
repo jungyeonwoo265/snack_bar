@@ -1,6 +1,8 @@
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
+import pymysql
+
 
 snack_bar = uic.loadUiType("snack_bar.ui")[0]
 
@@ -13,8 +15,7 @@ class WindowClass(QMainWindow, snack_bar) :
         self.mainpage_button.clicked.connect(self.mainpage)
         self.signup_main_button.clicked.connect(self.signup_page)
         self.signup_cancle_button.clicked.connect(self.homepage)
-        self.cancle_button.clicked.connect(self.homepage)
-        self.question_add_button.clicked.connect(self.mainpage)
+        self.question_add_button.clicked.connect(self.question_add)
         self.question_cancle_button.clicked.connect(self.mainpage)
         self.back_button.clicked.connect(self.manager_page)
         self.manager_question.clicked.connect(self.manager_page)
@@ -28,6 +29,8 @@ class WindowClass(QMainWindow, snack_bar) :
         self.salesback_button.clicked.connect(self.mainpage)
         self.signup_confirm_button.clicked.connect(self.homepage)
         self.manager_inventory.clicked.connect(self.question)
+        self.logout_main_button.clicked.connect(self.homepage)
+        self.logout_manager_button.clicked.connect(self.homepage)
 
 
     # 홈페이지 첫화면
@@ -45,6 +48,31 @@ class WindowClass(QMainWindow, snack_bar) :
     # 문의하기 게시판
     def question(self):
         self.stackedWidget.setCurrentIndex(3)
+        db = pymysql.connect(host='localhost', port=3306, user='root', password='0000', db='snack', charset='utf8')
+        cursor = db.cursor()
+        cursor.execute("SELECT * from snack.question")
+        questionlist = cursor.fetchall()
+        print(questionlist)
+        self.QandA_list.setRowCount(len(questionlist))
+        self.QandA_list.setColumnCount(len(questionlist[0]))
+        self.QandA_list.setHorizontalHeaderLabels(['주문번호', '아이디', '내용', '시간','답변'])
+        for i in range(len(questionlist)):
+            for j in range(len(questionlist[i])):
+                self.QandA_list.setItem(i, j, QTableWidgetItem(str(questionlist[i][j])))
+        # self.QandA_list.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.QandA_list.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
+
+    def question_add(self):
+        check = QMessageBox.question(self, ' ','등록 하겠습니까?', QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+        if check == QMessageBox.Yes:
+            QMessageBox.information(self, ' ','문의가 등록되었습니다.')
+
+
+        else:
+            QMessageBox.information(self, ' ', '상품주문으로 돌아갑니다.')
+
+
 
    # 관리자 재고확인하기
     def inventory_view(self):
