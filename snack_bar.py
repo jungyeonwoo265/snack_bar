@@ -27,10 +27,8 @@ class WindowClass(QMainWindow, snack_bar):
         self.back_button.clicked.connect(self.manager_page)
         self.manager_question.clicked.connect(self.manager_page)
         self.manager_inventory.clicked.connect(self.manager_page)
-        self.payment_cancle_button.clicked.connect(self.homepage)
         self.salesback_button.clicked.connect(self.homepage)
         self.salesback_button.clicked.connect(self.manager_page)
-        self.payment_cancle_button.clicked.connect(self.mainpage)
         self.question_button.clicked.connect(self.question)
         self.shopping_button.clicked.connect(self.shopping_basket)
         self.payment_cancle_button.clicked.connect(self.mainpage)
@@ -43,7 +41,6 @@ class WindowClass(QMainWindow, snack_bar):
         self.overlap_button.clicked.connect(self.double_check)
         self.logout_main_button.clicked.connect(self.homepage)
         self.logout_manager_button.clicked.connect(self.homepage)
-        self.manager_question.clicked.connect(self.question_view)
         self.manager_sales_del.clicked.connect(self.manager_question_del)
         self.manager_question_view.cellClicked.connect(self.cellclicked_event)
         self.manager_question_view.cellDoubleClicked.connect(self.cellclicked_event)
@@ -51,8 +48,6 @@ class WindowClass(QMainWindow, snack_bar):
         self.logout_manager_button_3.clicked.connect(self.manager_page)
         self.tableWidget_2.cellDoubleClicked.connect(self.del_request)
         self.shopping_list_del.clicked.connect(self.del_request)
-        # self.kimbap_plus.clicked.connect(self.dsf)
-        # self.tuna_kimbap_plus.clicked.connect(self.dsf)
         self.payment_button.clicked.connect(self.purchase)
 
     # 홈페이지 첫화면
