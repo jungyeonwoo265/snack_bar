@@ -1,6 +1,7 @@
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
+import pymysql
 
 snack_bar = uic.loadUiType("snack_bar.ui")[0]
 
@@ -13,34 +14,109 @@ class WindowClass(QMainWindow, snack_bar) :
         self.mainpage_button.clicked.connect(self.mainpage)
         self.signup_main_button.clicked.connect(self.signup_page)
         self.signup_cancle_button.clicked.connect(self.homepage)
-        self.cancle_button.clicked.connect(self.homepage)
         self.question_add_button.clicked.connect(self.mainpage)
         self.question_cancle_button.clicked.connect(self.mainpage)
         self.back_button.clicked.connect(self.manager_page)
         self.manager_question.clicked.connect(self.manager_page)
         self.manager_question.clicked.connect(self.manager_page)
         self.manager_inventory.clicked.connect(self.manager_page)
-        self.payment_cancle_button.clicked.connect(self.homepage)
+        # self.payment_cancle_button.clicked.connect(self.homepage)
         self.salesback_button.clicked.connect(self.homepage)
         self.question_button.clicked.connect(self.question)
         self.shopping_button.clicked.connect(self.shopping_basket)
         self.payment_cancle_button.clicked.connect(self.mainpage)
         self.salesback_button.clicked.connect(self.mainpage)
-        self.signup_confirm_button.clicked.connect(self.homepage)
+        self.signup_confirm_button.clicked.connect(self.signup)
         self.manager_inventory.clicked.connect(self.question)
+        self.overlap_button.clicked.connect(self.double_check)
+        self.logout_main_button.clicked.connect(self.homepage)
+        self.logout_manager_button.clicked.connect(self.homepage)
+        # self.kimbap_plus.clicked.connect(self.dsf)
+        # self.tuna_kimbap_plus.clicked.connect(self.dsf)
+
 
 
     # 홈페이지 첫화면
     def homepage(self):
+        self.id_check.clear()
+        self.name_check.clear()
+        self.pw_check.clear()
+        self.pw2_check.clear()
+        self.add_check.clear()
+        self.phon_check.clear()
+        self.lineEdit.clear()
+        self.lineEdit_2.clear()
         self.stackedWidget.setCurrentIndex(0)
+
+    def open_db(self):
+        self.conn = pymysql.connect(host='localhost', user='root', password='qwer1234', db='snack', charset='utf8')
+        self.c = self.conn.cursor()
+
+    def signup(self):
+        if self.id_check.text() == '' or self.name_check.text() == '' or self.pw_check.text() == '' or self.pw2_check.text() == '' or self.add_check.text() == '' or self.phon_check.text() == '':
+            QMessageBox.critical(self, "에러", "빈칸을 전부 입력해주세요")
+        elif self.pw_check.text() != self.pw2_check.text():
+            QMessageBox.critical(self, "에러", "비밀번호와 비밀번호확인이 일치하지 않습니다.")
+        elif bool(self.login_okay) == False:
+            QMessageBox.critical(self, "에러", "중복확인을 해주세요")
+        elif bool(self.buyer_Confirm_button.isChecked()) == False and bool(self.seller_Confirm_button.isChecked()) == False:
+            QMessageBox.critical(self, "에러", "사업자 또는 개인 선택해주세요")
+        else:
+            information = 'a'
+            if self.buyer_Confirm_button.isChecked():
+                information = self.buyer_Confirm_button.text()
+            elif self.seller_Confirm_button.isChecked():
+                information = self.seller_Confirm_button.text()
+            self.open_db()
+            self.c.execute(f'INSERT INTO user (아이디, 비밀번호, 이름, 주소, 전화번호, `사업자 여부`) VALUES ("{self.id_check.text()}", "{self.pw_check.text()}", "{self.name_check.text()}", "{self.add_check.text()}", "{self.phon_check.text()}", "{information}")')
+            self.conn.commit()
+            self.conn.close()
+            QMessageBox.information(self, "확인", "회원가입에 성공하셨습니다")
+            self.id_check.clear()
+            self.name_check.clear()
+            self.pw_check.clear()
+            self.pw2_check.clear()
+            self.add_check.clear()
+            self.phon_check.clear()
+            self.stackedWidget.setCurrentIndex(0)
+
+    def double_check(self):
+        self.db_open()
+        self.c.execute(f'SELECT 아이디 FROM user WHERE 아이디 = "{self.id_check.text()}"')
+        checking = self.c.fetchall()
+        self.conn.close()
+        print(checking)
+        if self.id_check.text() == '':
+            QMessageBox.critical(self, "에러", "아이디를 입력해주세요")
+        elif checking != ():
+            QMessageBox.critical(self, "에러", "중복된 아이디 입니다")
+        else:
+            QMessageBox.information(self, "확인", "사용가능한 아이디입니다")
+            self.login_okay = True
+            self.id_check.textChanged.connect(self.signup_page)
 
     # 회원가입 페이지
     def signup_page(self):
+        self.login_okay = False
         self.stackedWidget.setCurrentIndex(1)
+
 
     # 로그인후 가장 먼저 보이는 메뉴 창
     def mainpage(self):
-        self.stackedWidget.setCurrentIndex(2)
+        self.open_db()
+        self.c.execute(f'SELECT 아이디, `사업자 여부` FROM user WHERE 아이디 = "{self.lineEdit.text()}" and 비밀번호 = "{self.lineEdit_2.text()}"')
+        self.login_infor = self.c.fetchall()
+        self.conn.close()
+        if self.login_infor == ():
+            QMessageBox.critical(self, "에러", "아이디나 비밀번호가 틀립니다.")
+        else:
+            if self.login_infor[0][1] == '개인':
+                self.stackedWidget.setCurrentIndex(2)
+            elif self.login_infor[0][1] == '사업자':
+                self.stackedWidget.setCurrentIndex(7)
+
+    # def menu_counting(self):
+    #     if self.kimbap_plus.clicked.connect(self.)
 
     # 문의하기 게시판
     def question(self):
