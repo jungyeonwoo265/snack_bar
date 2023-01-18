@@ -108,7 +108,7 @@ class Thread(QThread):
             self.c.execute(f'select 주문번호 from finance order by 주문번호 desc;')
             store = self.c.fetchone()[0]
             # 아이디 구하기
-            self.c.execute(f'select 아이디 from user where "사업자 여부" = "개인";')
+            self.c.execute(f'select 아이디 from user where 사업자 = "개인";')
             name = self.c.fetchall()
             print(name)
             # self.user = random.choice(name)
@@ -240,7 +240,7 @@ class WindowClass(QMainWindow, snack_bar):
             elif self.seller_Confirm_button.isChecked():
                 information = self.seller_Confirm_button.text()
             self.open_db()
-            self.c.execute(f'INSERT INTO user (아이디, 비밀번호, 이름, 주소, 전화번호, "사업자 여부") VALUES'
+            self.c.execute(f'INSERT INTO user (아이디, 비밀번호, 이름, 주소, 전화번호, 사업자) VALUES'
                            f' ("{self.id_check.text()}", "{self.pw_check.text()}", "{self.name_check.text()}",'
                            f' "{self.add_check.text()}", "{self.phon_check.text()}", "{information}")')
             self.conn.commit()
@@ -278,7 +278,7 @@ class WindowClass(QMainWindow, snack_bar):
     # 로그인후 가장 먼저 보이는 메뉴 창
     def mainpage(self):
         self.open_db()
-        self.c.execute(f'SELECT 아이디, "사업자 여부" FROM user WHERE'
+        self.c.execute(f'SELECT 아이디, 사업자 FROM user WHERE'
                        f' 아이디 = "{self.lineEdit.text()}" and 비밀번호 = "{self.lineEdit_2.text()}"')
         self.login_infor = self.c.fetchall()
         self.conn.close()
