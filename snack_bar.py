@@ -421,7 +421,7 @@ class WindowClass(QMainWindow, snack_bar):
             self.pig_Stew_plus_3.setValue(0)
             self.tuna_Stew_plus.setValue(0)
             self.tableWidget_2.clear()
-
+        #1
     def tablesetting(self):
         self.total_bill = 0
         for i in range(len(self.request_list)):
