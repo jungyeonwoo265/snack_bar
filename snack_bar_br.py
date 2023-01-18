@@ -56,21 +56,21 @@ class WindowClass(QMainWindow, snack_bar):
 
         # 관리자메인페이지의 문의함보기 버튼클릭시 문의하기 게시판으로 이동
         self.manager_question.clicked.connect(self.question_view)
-        # 관리자 문의하기테이블위젯속 셀 클릭시 내용호출을 위한 함수실행 ----------------------
+        # 관리자문의하기 테이블위젯속 셀 클릭시 내용호출을 위한 함수실행 ----------------------
         self.manager_question_view.cellClicked.connect(self.cellclicked_event)
         self.manager_question_view.cellDoubleClicked.connect(self.cellclicked_event)
-        # 관리자의 문의하기 게시판속 삭제하기 버튼클릭시 게시글삭제함수 실행
+        # 관리자문의하기 게시판속 삭제하기 버튼클릭시 게시글삭제함수 실행
         self.manager_sales_del.clicked.connect(self.manager_question_del)
-        # 관리자의 문의하기 게시판속 답변달기 버튼클릭시 게시글추가함수 실행
+        # 관리자의문의하기 게시판속 답변달기 버튼클릭시 게시글추가함수 실행
         self.manager_sales_add.clicked.connect(self.manager_question_add)
-        # 관리자의 문의하기 게시판 속 취소 버튼클릭시 관리자메인페이지 이동
+        # 관리자의문의하기 게시판 속 취소 버튼클릭시 관리자메인페이지 이동
         self.logout_manager_button_3.clicked.connect(self.manager_page)
 
         # 관리자메인페이지속 매출확인 버튼클릭시 매출확인 게시판으로 이동
         self.manager_sales.clicked.connect(self.showgraph)
-        # 관리자 매출확인페이지속 취소 버튼클릭시 관리자메인페이지로 이동
+        # 관리자매출확인페이지속 취소 버튼클릭시 관리자메인페이지로 이동
         self.salesback_button.clicked.connect(self.manager_page)
-        # 관지라매출확인하기페이지속 돌아가기 버튼클릭시 관리자메인페이지로 이동
+        # 관지라매출확인페이지속 돌아가기 버튼클릭시 관리자메인페이지로 이동
         self.salesback_button.clicked.connect(self.mainpage)
 
         # 관리자메인페이지속 재고관리 버튼클릭시 재고관리 게시판으로 이동
@@ -80,7 +80,6 @@ class WindowClass(QMainWindow, snack_bar):
 
         # 관리자의 메인페이지속 로그아웃 버튼클릭시 로그인화면으로 이동
         self.logout_manager_button.clicked.connect(self.homepage)
-
 
     # 홈페이지 첫화면
     def homepage(self):
