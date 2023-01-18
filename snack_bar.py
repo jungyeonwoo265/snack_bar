@@ -148,7 +148,7 @@ class Thread(QThread):
             self.deduction()
             self.comment()
             self.p.show_inventory()
-            num = random.randrange(1, 5)
+            num = random.randrange(10, 15)
             time.sleep(num)
 
 
@@ -243,6 +243,10 @@ class WindowClass(QMainWindow, snack_bar):
         self.tuna_Stew_plus.setValue(0)
         self.tableWidget_2.clear()
         self.stackedWidget.setCurrentIndex(0)
+
+    def thread_action(self):
+        t = Thread(self)
+        t.start()
 
     def open_db(self):
         self.conn = p.connect(host=hos, user=use, password=pw, db='snack', charset='utf8')
@@ -624,7 +628,7 @@ class WindowClass(QMainWindow, snack_bar):
             print(a[0])
             date_list.append(a[0])
 
-        self.c.execute("SELECT 금액 FROM snack.request;")
+        self.c.execute("SELECT sum(금액) FROM snack.request group by 시간")
         self.questionlist = self.c.fetchall()
         for i in range(len(self.questionlist)):
             a = self.questionlist[i][0].split(" ")
