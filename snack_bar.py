@@ -57,7 +57,6 @@ class WindowClass(QMainWindow, snack_bar):
         self.payment_button.clicked.connect(self.purchase)
         self.manager_sales.clicked.connect(self.showgraph)
 
-
     # 홈페이지 첫화면
     def homepage(self):
         self.stackedWidget.setCurrentIndex(0)
@@ -288,7 +287,6 @@ class WindowClass(QMainWindow, snack_bar):
         self.open_db()
         self.c.execute(f'select 주문번호 from finance order by 주문번호 desc')
         store = self.c.fetchall()
-        print(store[0][0]+1)
         for i in range(len(self.request_list)):
             self.c.execute(f'insert into request (주문번호, 아이디, 상품명, 수량, 금액, 시간) values ("{store[0][0]+1}", "{self.login_infor[0][0]}", "{self.request_list[i][0]}", "{self.request_list[i][1]}", "{self.request_list[i][2]}", now())')
         self.conn.commit()
@@ -303,7 +301,21 @@ class WindowClass(QMainWindow, snack_bar):
         self.pig_Stew_plus_3.setValue(0)
         self.tuna_Stew_plus.setValue(0)
         self.stackedWidget.setCurrentIndex(2)
+        # self.incom()을 위해 추가
+        self.store = store[0][0]+1
+        self.income()
 
+    # 주문 금액 재무db에 저장하기
+    def income(self):
+        self.open_db()
+        self.c.execute(f"select sum(금액), min(시간) from request where 주문번호 = '{self.store}';")
+        income = self.c.fetchall()[0]
+        self.c.execute(f"select 잔액 from finance order by 주문번호 desc")
+        balance = self.c.fetchone()[0]
+        print(income, balance)
+        self.c.execute(f"insert into finance values ({self.store},'{self.login_infor[0][0]}님 구매',{income[0]},0,{balance+int(income[0])},'{income[1]}')")
+        self.conn.commit()
+        self.conn.close()
 
     # 관리자 매출확인
     def sales_view(self):
