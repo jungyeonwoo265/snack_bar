@@ -339,14 +339,17 @@ class WindowClass(QMainWindow, snack_bar):
         income = self.c.fetchall()[0]
         self.c.execute(f"select 잔액 from finance order by 주문번호 desc")
         balance = self.c.fetchone()[0]
-        print(income, balance)
-        self.c.execute(f"insert into finance values ({self.store},'{self.login_infor[0][0]}님 구매',{income[0]},0,{balance+int(income[0])},'{income[1]}')")
-        self.conn.commit()
+        if income[0]:
+            self.c.execute(f"insert into finance values ({self.store},'{self.login_infor[0][0]}님 구매',{income[0]},0,{balance+int(income[0])},'{income[1]}')")
+            self.conn.commit()
         self.conn.close()
 
     # 주문 상품 bom 재고 차감
     def deduction(self):
         self.open_db()
+        for i, v in enumerate(self.request_list):
+            self.c.execute(f"select a.재료, a.수량 as 소모량, b.수량 as 재고 from bom a left join inventory b on a.재료 =b.재료 where 상품명='김밥';")
+        self.conn.close()
 
     # 관리자용 메인화면
     def manager_page(self):
