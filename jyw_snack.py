@@ -105,21 +105,23 @@ class Thread(QThread):
                 self.requesr_list.append([menu_infor[0], order_num, menu_infor[1]])
             # 주문번호 구하기
             self.open_db()
-            self.c.execute(f'select 주문번호 from finance order by 주문번호 desc')
+            self.c.execute(f'select 주문번호 from finance order by 주문번호 desc;')
             store = self.c.fetchone()[0]
             # 아이디 구하기
-            self.c.execute(f"select 아이디 from user where 사업자여부 = '개인'")
+            self.c.execute(f'select 아이디 from user where "사업자 여부" = "개인";')
             name = self.c.fetchall()
-            self.user = random.choice(name)
-            for i, v in enumerate(self.requesr_list):
-                self.c.execute(f"insert into request values('{store+1}','{self.user[0]}','{v[0]}','{v[1]}','{v[2]}',now());")
-            self.conn.commit()
+            print(name)
+            # self.user = random.choice(name)
+            # print(self.user)
+            # for i, v in enumerate(self.requesr_list):
+            #     self.c.execute(f"insert into request values('{store+1}','{self.user[0]}','{v[0]}','{v[1]}','{v[2]}', now());")
+            # self.conn.commit()
             self.conn.close()
-            # self.incom()을 위해 추가
-            self.store = store + 1
-            self.income()
-            # self.deduction()을 위해 추가
-            self.deduction()
+            # # self.incom()을 위해 추가
+            # self.store = store + 1
+            # self.income()
+            # # self.deduction()을 위해 추가
+            # self.deduction()
             num = random.randrange(1, 5)
             time.sleep(num)
 
@@ -238,7 +240,7 @@ class WindowClass(QMainWindow, snack_bar):
             elif self.seller_Confirm_button.isChecked():
                 information = self.seller_Confirm_button.text()
             self.open_db()
-            self.c.execute(f'INSERT INTO user (아이디, 비밀번호, 이름, 주소, 전화번호, 사업자여부) VALUES'
+            self.c.execute(f'INSERT INTO user (아이디, 비밀번호, 이름, 주소, 전화번호, "사업자 여부") VALUES'
                            f' ("{self.id_check.text()}", "{self.pw_check.text()}", "{self.name_check.text()}",'
                            f' "{self.add_check.text()}", "{self.phon_check.text()}", "{information}")')
             self.conn.commit()
@@ -276,7 +278,7 @@ class WindowClass(QMainWindow, snack_bar):
     # 로그인후 가장 먼저 보이는 메뉴 창
     def mainpage(self):
         self.open_db()
-        self.c.execute(f'SELECT 아이디, 사업자여부 FROM user WHERE'
+        self.c.execute(f'SELECT 아이디, "사업자 여부" FROM user WHERE'
                        f' 아이디 = "{self.lineEdit.text()}" and 비밀번호 = "{self.lineEdit_2.text()}"')
         self.login_infor = self.c.fetchall()
         self.conn.close()
