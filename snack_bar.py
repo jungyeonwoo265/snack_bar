@@ -312,6 +312,8 @@ class WindowClass(QMainWindow, snack_bar):
         # self.incom()을 위해 추가
         self.store = store[0][0]+1
         self.income()
+        # self.deduction()을 위해 추가
+        self.deduction()
 
     # 주문 금액 재무db에 저장하기
     def income(self):
@@ -324,6 +326,11 @@ class WindowClass(QMainWindow, snack_bar):
         self.c.execute(f"insert into finance values ({self.store},'{self.login_infor[0][0]}님 구매',{income[0]},0,{balance+int(income[0])},'{income[1]}')")
         self.conn.commit()
         self.conn.close()
+
+    # 주문 상품 bom 재고 차감
+    def deduction(self):
+        self.open_db()
+
 
     # 관리자 매출확인
     def sales_view(self):

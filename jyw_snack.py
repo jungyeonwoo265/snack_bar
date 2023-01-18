@@ -4,6 +4,9 @@ from PyQt5 import uic
 import pymysql as p
 import datetime as dt
 from datetime import datetime
+import matplotlib
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 snack_bar = uic.loadUiType("snack_bar.ui")[0]
 
@@ -30,23 +33,31 @@ class WindowClass(QMainWindow, snack_bar):
         self.manager_inventory.clicked.connect(self.manager_page)
         self.manager_inventory.clicked.connect(self.inventory_view)
         self.salesback_button.clicked.connect(self.manager_page)
+        self.payment_cancle_button.clicked.connect(self.mainpage)
         self.question_button.clicked.connect(self.question)
         self.shopping_button.clicked.connect(self.shopping_basket)
         self.payment_cancle_button.clicked.connect(self.mainpage)
+        self.salesback_button.clicked.connect(self.mainpage)
         self.signup_confirm_button.clicked.connect(self.signup)
+        self.manager_inventory.clicked.connect(self.question)
         self.manager_question.clicked.connect(self.question_view)
+        self.manager_inventory.clicked.connect(self.inventory_view)
+        self.manager_sales.clicked.connect(self.sales_view)
         self.overlap_button.clicked.connect(self.double_check)
         self.logout_main_button.clicked.connect(self.homepage)
         self.logout_manager_button.clicked.connect(self.homepage)
-        self.manager_sales.clicked.connect(self.sales_view)
+        self.manager_question.clicked.connect(self.question_view)
+        self.manager_sales_del.clicked.connect(self.manager_question_del)
         self.manager_question_view.cellClicked.connect(self.cellclicked_event)
         self.manager_question_view.cellDoubleClicked.connect(self.cellclicked_event)
+        self.manager_sales_add.clicked.connect(self.manager_question_add)
         self.logout_manager_button_3.clicked.connect(self.manager_page)
         self.tableWidget_2.cellDoubleClicked.connect(self.del_request)
         self.shopping_list_del.clicked.connect(self.del_request)
         self.payment_button.clicked.connect(self.purchase)
         self.manager_sales_del.clicked.connect(self.manager_question_del)
         self.manager_sales_add.clicked.connect(self.manager_question_add)
+        self.manager_sales.clicked.connect(self.showgraph)
 
     # 홈페이지 첫화면
     def homepage(self):
@@ -141,7 +152,7 @@ class WindowClass(QMainWindow, snack_bar):
             if self.login_infor[0][1] == '개인':
                 self.stackedWidget.setCurrentIndex(2)
             elif self.login_infor[0][1] == '사업자':
-                self.stackedWidget.setCurrentIndex(7)
+                self.manager_page()
 
     def menu_counting(self):
         self.kimbap_plus.setStep(0)
@@ -247,9 +258,10 @@ class WindowClass(QMainWindow, snack_bar):
         self.total_bill = 0
         self.request_list = []
         # 장바구니에서 메뉴고르는 페이지로 돌아왔을때 다 0으로 초기화해주면 다시 고르려는것도 사라지니까 이거 생각좀 해야할듯
+
         if self.kimbap_plus.value() != 0:
             self.request_list.append(['김밥', str(self.kimbap_plus.value()),
-                                      str(self.tuna_kimbap_plus_2.value() * 9000)])
+                                      str(self.kimbap_plus.value() * 9000)])
         if self.tuna_kimbap_plus_2.value() != 0:
             self.request_list.append(['참치김밥', str(self.tuna_kimbap_plus_2.value()),
                                       str(self.tuna_kimbap_plus_2.value()*11000)])
@@ -281,16 +293,44 @@ class WindowClass(QMainWindow, snack_bar):
     def purchase(self):
         now = datetime.now()
         self.open_db()
-        # self.c.execute(f'select 주문번호 from request')
-        # store = self.c.fetchall()
-        # for i in range(len(self.request_list[0])):
-        #     self.c.execute(
-        #         f'INSERT INTO request (주문번호, 아이디, 상품명, 수량, 금액, 시간) VALUES
-        #         ("{}", "{self.login_infor[0][0]}", "{self.request_list[0][0]}", "{self.request_list[0][1]}"
-        #         , "{self.request_list[0][2]}", now())')
-        # self.conn.commit()
+        self.c.execute(f'select 주문번호 from finance order by 주문번호 desc')
+        store = self.c.fetchall()
+        for i in range(len(self.request_list)):
+            self.c.execute(f'insert into request (주문번호, 아이디, 상품명, 수량, 금액, 시간) values ("{store[0][0]+1}", "{self.login_infor[0][0]}", "{self.request_list[i][0]}", "{self.request_list[i][1]}", "{self.request_list[i][2]}", now())')
+        self.conn.commit()
         self.conn.close()
-        # order_num += 1
+        QMessageBox.information(self, "확인", "주문이 접수되었습니다")
+        self.kimbap_plus.setValue(0)
+        self.tuna_kimbap_plus_2.setValue(0)
+        self.Cheese_kimbap_plus_2.setValue(0)
+        self.bokki_plus_3.setValue(0)
+        self.rabokki_plus_3.setValue(0)
+        self.Cheese_bokki_plus.setValue(0)
+        self.pig_Stew_plus_3.setValue(0)
+        self.tuna_Stew_plus.setValue(0)
+        self.stackedWidget.setCurrentIndex(2)
+        # self.incom()을 위해 추가
+        self.store = store[0][0]+1
+        self.income()
+        # self.deduction()을 위해 추가
+        self.deduction()
+
+    # 주문 금액 재무db에 저장하기
+    def income(self):
+        self.open_db()
+        self.c.execute(f"select sum(금액), min(시간) from request where 주문번호 = '{self.store}';")
+        income = self.c.fetchall()[0]
+        self.c.execute(f"select 잔액 from finance order by 주문번호 desc")
+        balance = self.c.fetchone()[0]
+        print(income, balance)
+        self.c.execute(f"insert into finance values ({self.store},'{self.login_infor[0][0]}님 구매',{income[0]},0,{balance+int(income[0])},'{income[1]}')")
+        self.conn.commit()
+        self.conn.close()
+
+    # 주문 상품 bom 재고 차감
+    def deduction(self):
+        self.open_db()
+
 
     # 관리자 매출확인
     def sales_view(self):
@@ -298,6 +338,17 @@ class WindowClass(QMainWindow, snack_bar):
 
     # 관리자용 메인화면
     def manager_page(self):
+        self.open_db()
+        self.c.execute('select * from request')
+        list_request = self.c.fetchall()
+        self.conn.close()
+        if list_request != ():
+            self.order_confirmation.setRowCount(len(list_request))
+            self.order_confirmation.setColumnCount(len(list_request[0]))
+            self.order_confirmation.setEditTriggers(QAbstractItemView.NoEditTriggers)
+            for i in range(len(list_request)):
+                for j in range(len(list_request[0])):
+                    self.order_confirmation.setItem(i, j, QTableWidgetItem(list_request[i][j]))
         self.stackedWidget.setCurrentIndex(7)
 
     # 관리자 문의함확인하기
@@ -317,6 +368,7 @@ class WindowClass(QMainWindow, snack_bar):
         self.conn.close()
 
     def del_request(self):
+
         QMessageBox.information(self, "확인", "장바구니에서 삭제합니다")
         list_row = self.tableWidget_2.currentRow()
         del_list = self.request_list[list_row]
@@ -371,6 +423,8 @@ class WindowClass(QMainWindow, snack_bar):
         self.tableWidget_2.setRowCount(len(self.request_list))
         self.tableWidget_2.setColumnCount(len(self.request_list[0]))
         self.tableWidget_2.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.tableWidget_2.setHorizontalHeaderLabels(['품목', '개수', '금액'])
+        self.tableWidget_2.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         for i in range(len(self.request_list)):
             for j in range(len(self.request_list[0])):
                 self.tableWidget_2.setItem(i, j, QTableWidgetItem(self.request_list[i][j]))
@@ -423,6 +477,14 @@ class WindowClass(QMainWindow, snack_bar):
     def cellclicked_event(self, row, col):
         self.data = self.manager_question_view.item(row, col)
         self.cellchoice = self.data.text()
+
+    def showgraph(self):
+        self.fig = plt.Figure()
+        self.figpie = plt.Figure()
+        self.canvas = FigureCanvas(self.fig)
+        self.canvas2 = FigureCanvas(self.figpie)
+        self.verticalLayout.addWidget(self.canvas)
+        ax = self.fig.add_subplot(111)
 
 
 if __name__ == "__main__":
