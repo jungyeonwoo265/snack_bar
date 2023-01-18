@@ -81,7 +81,6 @@ class WindowClass(QMainWindow, snack_bar):
         # 관리자의 메인페이지속 로그아웃 버튼클릭시 로그인화면으로 이동
         self.logout_manager_button.clicked.connect(self.homepage)
 
-
     # 홈페이지 첫화면
     def homepage(self):
         self.stackedWidget.setCurrentIndex(0)
@@ -347,8 +346,12 @@ class WindowClass(QMainWindow, snack_bar):
     # 주문 상품 bom 재고 차감
     def deduction(self):
         self.open_db()
-        for i, v in enumerate(self.request_list):
-            self.c.execute(f"select a.재료, a.수량 as 소모량, b.수량 as 재고 from bom a left join inventory b on a.재료 =b.재료 where 상품명='김밥';")
+        for v in self.request_list:
+            self.c.execute(f"select 재료, 수량*{v[1]} as 소모량 from bom where 상품명='{v[0]}';")
+            consumption = self.c.fetchall()
+            for i in consumption:
+                self.c.execute(f"update inventory set 수량 = 수량 - {i[1]} where 재료 ='{i[0]}';")
+                self.conn.commit()
         self.conn.close()
 
     # 관리자용 메인화면
