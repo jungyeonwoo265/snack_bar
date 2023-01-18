@@ -81,6 +81,33 @@ class Thread(QThread):
                 self.conn.commit()
         self.conn.close()
 
+    def comment(self):
+        com = ['잘먹을게요',
+               '많이파세요',
+               '좋은 재료 쓰시나봐요',
+               '다시 구매 합니다.',
+               '혹시 서비스 있나요?']
+        self.time = dt.datetime.now()
+        self.today = self.time.strftime('%Y-%m-%d %H:%M:%S')
+        self.open_db()
+        # 로그인된 고객의 아이디와 문의내용을 저장시켜준다
+        for i in self.requesr_list:
+            # 주문번호, 상품,. 아이디, 내용, 시간, 답변
+            self.c.execute(f"insert into question values"
+                           f"('{self.store}','{i[0]}','{self.user[0]}','{random.choice(com)}','{self.today}','');")
+        self.conn.commit()
+        # 문의한 내용을 리스트로 바로 보여주기 위한 커서
+        self.c.execute("SELECT * from snack.question")
+        self.questionlist = self.c.fetchall()
+        self.p.manager_question_view.setRowCount(len(self.questionlist))
+        self.p.manager_question_view.setColumnCount(len(self.questionlist[0]))
+        self.p.manager_question_view.setHorizontalHeaderLabels(['주문번호', '아이디', '내용', '시간', '답변'])
+        for i in range(len(self.questionlist)):
+            for j in range(len(self.questionlist[i])):
+                self.p.manager_question_view.setItem(i, j, QTableWidgetItem(str(self.questionlist[i][j])))
+        self.p.manager_question_view.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.conn.close()
+
     def run(self):
         while True:
             self.requesr_list = list()
@@ -106,22 +133,21 @@ class Thread(QThread):
             # 주문번호 구하기
             self.open_db()
             self.c.execute(f'select 주문번호 from finance order by 주문번호 desc;')
-            store = self.c.fetchone()[0]
+            self.store = self.c.fetchone()[0] + 1
             # 아이디 구하기
             self.c.execute(f'select 아이디 from user where 사업자 = "개인";')
             name = self.c.fetchall()
-            print(name)
-            # self.user = random.choice(name)
-            # print(self.user)
-            # for i, v in enumerate(self.requesr_list):
-            #     self.c.execute(f"insert into request values('{store+1}','{self.user[0]}','{v[0]}','{v[1]}','{v[2]}', now());")
-            # self.conn.commit()
+            self.user = random.choice(name)
+            for i, v in enumerate(self.requesr_list):
+                self.c.execute(f"insert into request values('{self.store}','{self.user[0]}','{v[0]}','{v[1]}','{v[2]}', now());")
+            self.conn.commit()
             self.conn.close()
-            # # self.incom()을 위해 추가
-            # self.store = store + 1
-            # self.income()
-            # # self.deduction()을 위해 추가
-            # self.deduction()
+            # self.incom()을 위해 추가
+            self.income()
+            # self.deduction()을 위해 추가
+            self.deduction()
+            self.comment()
+            self.p.show_inventory()
             num = random.randrange(1, 5)
             time.sleep(num)
 
@@ -403,7 +429,9 @@ class WindowClass(QMainWindow, snack_bar):
         self.c.execute(f'select 주문번호 from finance order by 주문번호 desc')
         store = self.c.fetchall()
         for i in range(len(self.request_list)):
-            self.c.execute(f'insert into request (주문번호, 아이디, 상품명, 수량, 금액, 시간) values ("{store[0][0]+1}", "{self.login_infor[0][0]}", "{self.request_list[i][0]}", "{self.request_list[i][1]}", "{self.request_list[i][2]}", now())')
+            self.c.execute(f'insert into request (주문번호, 아이디, 상품명, 수량, 금액, 시간) values'
+                           f' ("{store[0][0]+1}", "{self.login_infor[0][0]}", "{self.request_list[i][0]}",'
+                           f' "{self.request_list[i][1]}", "{self.request_list[i][2]}", now())')
         self.conn.commit()
         self.conn.close()
         QMessageBox.information(self, "확인", "주문이 접수되었습니다")
@@ -416,11 +444,6 @@ class WindowClass(QMainWindow, snack_bar):
         self.pig_Stew_plus_3.setValue(0)
         self.tuna_Stew_plus.setValue(0)
         self.stackedWidget.setCurrentIndex(2)
-        # self.incom()을 위해 추가
-        self.store = store[0][0]+1
-        self.income()
-        # self.deduction()을 위해 추가
-        self.deduction()
 
     # 관리자용 메인화면
     def manager_page(self):
