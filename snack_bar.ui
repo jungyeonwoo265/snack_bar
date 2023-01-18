@@ -32,7 +32,7 @@
     <string notr="true"/>
    </property>
    <property name="currentIndex">
-    <number>8</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="page">
     <widget class="QLabel" name="label">
@@ -981,7 +981,7 @@ color:white;
     <widget class="QSpinBox" name="bokki_plus_3">
      <property name="geometry">
       <rect>
-       <x>820</x>
+       <x>810</x>
        <y>220</y>
        <width>51</width>
        <height>31</height>
@@ -992,7 +992,7 @@ color:white;
      <property name="geometry">
       <rect>
        <x>680</x>
-       <y>227</y>
+       <y>230</y>
        <width>141</width>
        <height>21</height>
       </rect>
@@ -1116,6 +1116,110 @@ color:white;
        <width>51</width>
        <height>30</height>
       </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="kimbap_max">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>260</y>
+       <width>131</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>최대주문수량:0</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="tuna_kimbap_max">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>260</y>
+       <width>131</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>최대주문수량:0</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="Cheese_kimbap_max">
+     <property name="geometry">
+      <rect>
+       <x>490</x>
+       <y>260</y>
+       <width>131</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>최대주문수량:0</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="bokki_max">
+     <property name="geometry">
+      <rect>
+       <x>700</x>
+       <y>258</y>
+       <width>131</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>최대주문수량:0</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="rabokki_max">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>460</y>
+       <width>131</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>최대주문수량:0</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="Cheese_bokki_max">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>460</y>
+       <width>131</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>최대주문수량:0</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="pig_Stew_max">
+     <property name="geometry">
+      <rect>
+       <x>490</x>
+       <y>459</y>
+       <width>131</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>최대주문수량:0</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="tuna_Stew_max">
+     <property name="geometry">
+      <rect>
+       <x>710</x>
+       <y>457</y>
+       <width>131</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>최대주문수량:0</string>
      </property>
     </widget>
    </widget>
@@ -1482,16 +1586,6 @@ color:white;
      </property>
      <layout class="QVBoxLayout" name="verticalLayout"/>
     </widget>
-    <widget class="QListWidget" name="listWidget_2">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>60</y>
-       <width>841</width>
-       <height>192</height>
-      </rect>
-     </property>
-    </widget>
     <widget class="QPushButton" name="salesback_button">
      <property name="geometry">
       <rect>
@@ -1514,6 +1608,16 @@ border-style: solid;
      </property>
      <property name="text">
       <string>돌아가기</string>
+     </property>
+    </widget>
+    <widget class="QTableWidget" name="tableWidget">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>60</y>
+       <width>841</width>
+       <height>192</height>
+      </rect>
      </property>
     </widget>
    </widget>
@@ -1764,10 +1868,10 @@ color:white;
   </widget>
  </widget>
  <tabstops>
-  <tabstop>id_check</tabstop>
-  <tabstop>name_check</tabstop>
-  <tabstop>pw_check</tabstop>
-  <tabstop>pw2_check</tabstop>
+  <tabstop>lineEdit</tabstop>
+  <tabstop>lineEdit_2</tabstop>
+  <tabstop>signup_main_button</tabstop>
+  <tabstop>mainpage_button</tabstop>
   <tabstop>add_check</tabstop>
   <tabstop>phon_check</tabstop>
   <tabstop>seller_Confirm_button</tabstop>
@@ -1775,8 +1879,8 @@ color:white;
   <tabstop>signup_confirm_button</tabstop>
   <tabstop>signup_cancle_button</tabstop>
   <tabstop>overlap_button</tabstop>
-  <tabstop>signup_main_button</tabstop>
-  <tabstop>lineEdit_2</tabstop>
+  <tabstop>pw_check</tabstop>
+  <tabstop>name_check</tabstop>
   <tabstop>shopping_button</tabstop>
   <tabstop>question_add_button</tabstop>
   <tabstop>question_cancle_button</tabstop>
@@ -1786,8 +1890,8 @@ color:white;
   <tabstop>payment_button</tabstop>
   <tabstop>payment_cancle_button</tabstop>
   <tabstop>shopping_list_del</tabstop>
-  <tabstop>lineEdit</tabstop>
-  <tabstop>mainpage_button</tabstop>
+  <tabstop>id_check</tabstop>
+  <tabstop>pw2_check</tabstop>
   <tabstop>pushButton</tabstop>
   <tabstop>pushButton_2</tabstop>
   <tabstop>pushButton_15</tabstop>
@@ -1796,8 +1900,31 @@ color:white;
   <tabstop>pushButton_20</tabstop>
   <tabstop>pushButton_16</tabstop>
   <tabstop>pushButton_21</tabstop>
-  <tabstop>listWidget_2</tabstop>
   <tabstop>salesback_button</tabstop>
+  <tabstop>question_button</tabstop>
+  <tabstop>logout_main_button</tabstop>
+  <tabstop>kimbap_plus</tabstop>
+  <tabstop>tuna_kimbap_plus_2</tabstop>
+  <tabstop>Cheese_kimbap_plus_2</tabstop>
+  <tabstop>bokki_plus_3</tabstop>
+  <tabstop>rabokki_plus_3</tabstop>
+  <tabstop>Cheese_bokki_plus</tabstop>
+  <tabstop>pig_Stew_plus_3</tabstop>
+  <tabstop>tuna_Stew_plus</tabstop>
+  <tabstop>QandA_list</tabstop>
+  <tabstop>QandA_lineEdit</tabstop>
+  <tabstop>inventorylist_2</tabstop>
+  <tabstop>manager_question</tabstop>
+  <tabstop>manager_inventory</tabstop>
+  <tabstop>manager_sales</tabstop>
+  <tabstop>order_confirmation</tabstop>
+  <tabstop>logout_manager_button</tabstop>
+  <tabstop>manager_question_view</tabstop>
+  <tabstop>manager_line_add</tabstop>
+  <tabstop>manager_sales_add</tabstop>
+  <tabstop>manager_sales_del</tabstop>
+  <tabstop>logout_manager_button_3</tabstop>
+  <tabstop>tableWidget</tabstop>
  </tabstops>
  <resources/>
  <connections/>
