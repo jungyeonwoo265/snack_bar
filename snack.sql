@@ -128,8 +128,8 @@ DROP TABLE IF EXISTS `question`;
 CREATE TABLE `question` (
   `주문번호` text,
   `아이디` text,
-  `문의내용` text,
-  `문의시간` text,
+  `내용` text,
+  `시간` text,
   `답변` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -205,4 +205,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-01-17 19:43:40
+-- Dump completed on 2023-01-18 10:18:31
