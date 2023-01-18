@@ -32,7 +32,7 @@
     <string notr="true"/>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>9</number>
    </property>
    <widget class="QWidget" name="page">
     <widget class="QLabel" name="label">
@@ -1979,7 +1979,7 @@ color:white;
       <string>  신제품 추가하기</string>
      </property>
     </widget>
-    <widget class="QTableWidget" name="tableWidget_3">
+    <widget class="QTableWidget" name="ingredient_list">
      <property name="geometry">
       <rect>
        <x>40</x>
@@ -1989,7 +1989,7 @@ color:white;
       </rect>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_3">
+    <widget class="QLineEdit" name="food_name">
      <property name="geometry">
       <rect>
        <x>40</x>
@@ -1999,7 +1999,7 @@ color:white;
       </rect>
      </property>
     </widget>
-    <widget class="QPushButton" name="manager_sales_del_2">
+    <widget class="QPushButton" name="food_search">
      <property name="geometry">
       <rect>
        <x>240</x>
@@ -2025,17 +2025,7 @@ border-style: solid;
       <string>검색</string>
      </property>
     </widget>
-    <widget class="QColumnView" name="columnView">
-     <property name="geometry">
-      <rect>
-       <x>370</x>
-       <y>90</y>
-       <width>321</width>
-       <height>401</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="manager_sales_del_3">
+    <widget class="QPushButton" name="add_btn">
      <property name="geometry">
       <rect>
        <x>780</x>
@@ -2061,7 +2051,7 @@ border-style: solid;
       <string>추가하기</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_4">
+    <widget class="QLineEdit" name="ingredient_name">
      <property name="geometry">
       <rect>
        <x>770</x>
@@ -2071,7 +2061,7 @@ border-style: solid;
       </rect>
      </property>
     </widget>
-    <widget class="QComboBox" name="comboBox_2">
+    <widget class="QComboBox" name="unit_box">
      <property name="geometry">
       <rect>
        <x>860</x>
@@ -2096,7 +2086,7 @@ border-style: solid;
       </property>
      </item>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_5">
+    <widget class="QLineEdit" name="new_name">
      <property name="geometry">
       <rect>
        <x>440</x>
@@ -2132,7 +2122,7 @@ border-style: solid;
       <string>상품가격</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_6">
+    <widget class="QLineEdit" name="price">
      <property name="geometry">
       <rect>
        <x>650</x>
@@ -2168,7 +2158,7 @@ border-style: solid;
       <string>재료이름</string>
      </property>
     </widget>
-    <widget class="QTableWidget" name="tableWidget_4">
+    <widget class="QTableWidget" name="newrecipe">
      <property name="geometry">
       <rect>
        <x>720</x>
@@ -2178,7 +2168,7 @@ border-style: solid;
       </rect>
      </property>
     </widget>
-    <widget class="QPushButton" name="manager_sales_del_4">
+    <widget class="QPushButton" name="confirm_btn">
      <property name="geometry">
       <rect>
        <x>790</x>
@@ -2202,6 +2192,16 @@ border-style: solid;
      </property>
      <property name="text">
       <string>확인</string>
+     </property>
+    </widget>
+    <widget class="QTableWidget" name="ingredient">
+     <property name="geometry">
+      <rect>
+       <x>400</x>
+       <y>90</y>
+       <width>256</width>
+       <height>391</height>
+      </rect>
      </property>
     </widget>
    </widget>
