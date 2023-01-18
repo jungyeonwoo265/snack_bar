@@ -114,7 +114,7 @@ CREATE TABLE `menu` (
 
 LOCK TABLES `menu` WRITE;
 /*!40000 ALTER TABLE `menu` DISABLE KEYS */;
-INSERT INTO `menu` VALUES ('김밥',7500,'개'),('참치김밥',8200,'개'),('치즈김밥',9900,'개'),('떡복이',6500,'개'),('라볶이',7300,'개'),('치즈떡복이',7100,'개'),('돼지김치찌개',16600,'개'),('참치김치찌개',11600,'개');
+INSERT INTO `menu` VALUES ('김밥',9000,'원'),('참치김밥',11000,'원'),('치즈김밥',11000,'원'),('떡복이',15000,'원'),('라볶이',17000,'원'),('치즈떡복이',17000,'원'),('돼지김치찌개',14000,'원'),('참치김치찌개',18000,'원');
 /*!40000 ALTER TABLE `menu` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -205,4 +205,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-01-18 10:18:31
+-- Dump completed on 2023-01-18 11:19:47
