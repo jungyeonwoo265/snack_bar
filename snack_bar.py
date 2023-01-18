@@ -70,7 +70,7 @@ class WindowClass(QMainWindow, snack_bar):
         # 관리자메인페이지속 매출확인 버튼클릭시 매출확인 게시판으로 이동
         self.manager_sales.clicked.connect(self.showgraph)
         # 관리자매출확인페이지속 취소 버튼클릭시 관리자메인페이지로 이동
-        self.salesback_button.clicked.connect(self.manager_page)
+        self.salesback_button.clicked.connect(self.show_back_b)
 
         # 관리자메인페이지속 재고관리 버튼클릭시 재고관리 게시판으로 이동
         self.manager_inventory.clicked.connect(self.inventory_view)

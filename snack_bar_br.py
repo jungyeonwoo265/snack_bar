@@ -57,20 +57,20 @@ class WindowClass(QMainWindow, snack_bar):
 
         # 관리자메인페이지의 문의함보기 버튼클릭시 문의하기 게시판으로 이동
         self.manager_question.clicked.connect(self.question_view)
-        # 관리자문의하기 테이블위젯속 셀 클릭시 내용호출을 위한 함수실행 -----------------
+        # 관리자 문의하기테이블위젯속 셀 클릭시 내용호출을 위한 함수실행 ----------------
         self.manager_question_view.cellClicked.connect(self.cellclicked_event)
         self.manager_question_view.cellDoubleClicked.connect(self.cellclicked_event)
-        # 관리자문의하기 게시판속 삭제하기 버튼클릭시 게시글삭제함수 실행
+        # 관리자의 문의하기 게시판속 삭제하기 버튼클릭시 게시글삭제함수 실행
         self.manager_sales_del.clicked.connect(self.manager_question_del)
-        # 관리자의문의하기 게시판속 답변달기 버튼클릭시 게시글추가함수 실행
+        # 관리자의 문의하기 게시판속 답변달기 버튼클릭시 게시글추가함수 실행
         self.manager_sales_add.clicked.connect(self.manager_question_add)
-        # 관리자의문의하기 게시판 속 취소 버튼클릭시 관리자메인페이지 이동
+        # 관리자의 문의하기 게시판 속 취소 버튼클릭시 관리자메인페이지 이동
         self.logout_manager_button_3.clicked.connect(self.manager_page)
 
         # 관리자메인페이지속 매출확인 버튼클릭시 매출확인 게시판으로 이동
         self.manager_sales.clicked.connect(self.showgraph)
         # 관리자매출확인페이지속 취소 버튼클릭시 관리자메인페이지로 이동
-        self.salesback_button.clicked.connect(self.back_b)
+        self.salesback_button.clicked.connect(self.show_back_b)
 
         # 관리자메인페이지속 재고관리 버튼클릭시 재고관리 게시판으로 이동
         self.manager_inventory.clicked.connect(self.inventory_view)
@@ -79,8 +79,6 @@ class WindowClass(QMainWindow, snack_bar):
 
         # 관리자의 메인페이지속 로그아웃 버튼클릭시 로그인화면으로 이동
         self.logout_manager_button.clicked.connect(self.homepage)
-
-
 
     # 홈페이지 첫화면
     def homepage(self):
@@ -164,7 +162,6 @@ class WindowClass(QMainWindow, snack_bar):
 
     # 로그인후 가장 먼저 보이는 메뉴 창
     def mainpage(self):
-
         self.open_db()
         self.c.execute(f'SELECT 아이디, `사업자 여부` FROM user WHERE'
                        f' 아이디 = "{self.lineEdit.text()}" and 비밀번호 = "{self.lineEdit_2.text()}"')
@@ -340,14 +337,21 @@ class WindowClass(QMainWindow, snack_bar):
         income = self.c.fetchall()[0]
         self.c.execute(f"select 잔액 from finance order by 주문번호 desc")
         balance = self.c.fetchone()[0]
-        print(income, balance)
-        self.c.execute(f"insert into finance values ({self.store},'{self.login_infor[0][0]}님 구매',{income[0]},0,{balance+int(income[0])},'{income[1]}')")
-        self.conn.commit()
+        if income[0]:
+            self.c.execute(f"insert into finance values ({self.store},'{self.login_infor[0][0]}님 구매',{income[0]},0,{balance+int(income[0])},'{income[1]}')")
+            self.conn.commit()
         self.conn.close()
 
     # 주문 상품 bom 재고 차감
     def deduction(self):
         self.open_db()
+        for v in self.request_list:
+            self.c.execute(f"select 재료, 수량*{v[1]} as 소모량 from bom where 상품명='{v[0]}';")
+            consumption = self.c.fetchall()
+            for i in consumption:
+                self.c.execute(f"update inventory set 수량 = 수량 - {i[1]} where 재료 ='{i[0]}';")
+                self.conn.commit()
+        self.conn.close()
 
     # 관리자용 메인화면
     def manager_page(self):
@@ -363,7 +367,6 @@ class WindowClass(QMainWindow, snack_bar):
                 for j in range(len(list_request[0])):
                     self.order_confirmation.setItem(i, j, QTableWidgetItem(list_request[i][j]))
         self.stackedWidget.setCurrentIndex(7)
-
 
     # 관리자 문의함 확인하기
     def question_view(self):
@@ -518,6 +521,7 @@ class WindowClass(QMainWindow, snack_bar):
     def show_back_b(self):
         self.verticalLayout.removeWidget(self.canvas)
         self.manager_page()
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
