@@ -60,7 +60,7 @@ class Thread(QThread):
     def ordering(self):
         self.open_db()
         self.c.execute(
-            f'select a.재료, if(max(a.수량) > min(b.수량), "구매", "보류"), min(b.단가) '
+            f'select a.재료, if(max(a.수량)*20 > min(b.수량), "구매", "보류"), min(b.단가) '
             f'from bom a left join inventory b on a.재료 = b.재료 group by 재료;')
         article = self.c.fetchall()
         article_list = list()
