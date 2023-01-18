@@ -409,14 +409,15 @@ class WindowClass(QMainWindow, snack_bar):
             QMessageBox.information(self, ' ', '삭제되었습니다.')
         else:
             QMessageBox.information(self, ' ', '문의함으로 돌아갑니다.')
-
-        self.manager_question_view.setRowCount(len(self.questionlist))
-        self.manager_question_view.setColumnCount(len(self.questionlist[0]))
-        self.manager_question_view.setHorizontalHeaderLabels(['주문번호', '아이디', '내용', '시간', '답변'])
-        for i in range(len(self.questionlist)):
-            for j in range(len(self.questionlist[i])):
-                self.manager_question_view.setItem(i, j, QTableWidgetItem(str(self.questionlist[i][j])))
-        self.manager_question_view.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        # 내용이 있으면
+        if self.questionlist:
+            self.manager_question_view.setRowCount(len(self.questionlist))
+            self.manager_question_view.setColumnCount(len(self.questionlist[0]))
+            self.manager_question_view.setHorizontalHeaderLabels(['주문번호', '아이디', '내용', '시간', '답변'])
+            for i in range(len(self.questionlist)):
+                for j in range(len(self.questionlist[i])):
+                    self.manager_question_view.setItem(i, j, QTableWidgetItem(str(self.questionlist[i][j])))
+            self.manager_question_view.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         self.conn.close()
 
     def cellclicked_event(self, row, col):
