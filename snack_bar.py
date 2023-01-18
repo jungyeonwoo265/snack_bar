@@ -4,13 +4,16 @@ from PyQt5 import uic
 import pymysql as p
 import datetime as dt
 from datetime import datetime
+import matplotlib
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 snack_bar = uic.loadUiType("snack_bar.ui")[0]
 
 # db 연결용 정보
 hos = 'localhost'
 use = 'root'
-pw = 'qwer1234'
+pw = '0000'
 
 
 class WindowClass(QMainWindow, snack_bar):
@@ -26,9 +29,9 @@ class WindowClass(QMainWindow, snack_bar):
         self.question_cancle_button.clicked.connect(self.mainpage)
         self.back_button.clicked.connect(self.manager_page)
         self.manager_question.clicked.connect(self.manager_page)
+        self.manager_question.clicked.connect(self.question)
         self.manager_inventory.clicked.connect(self.manager_page)
-        # self.payment_cancle_button.clicked.connect(self.homepage)
-        self.salesback_button.clicked.connect(self.homepage)
+        self.manager_inventory.clicked.connect(self.inventory_view)
         self.salesback_button.clicked.connect(self.manager_page)
         self.payment_cancle_button.clicked.connect(self.mainpage)
         self.question_button.clicked.connect(self.question)
@@ -51,9 +54,11 @@ class WindowClass(QMainWindow, snack_bar):
         self.logout_manager_button_3.clicked.connect(self.manager_page)
         self.tableWidget_2.cellDoubleClicked.connect(self.del_request)
         self.shopping_list_del.clicked.connect(self.del_request)
-        # self.kimbap_plus.clicked.connect(self.dsf)
-        # self.tuna_kimbap_plus.clicked.connect(self.dsf)
         self.payment_button.clicked.connect(self.purchase)
+        self.manager_sales_del.clicked.connect(self.manager_question_del)
+        self.manager_sales_add.clicked.connect(self.manager_question_add)
+        self.manager_sales.clicked.connect(self.showgraph)
+
 
     # 홈페이지 첫화면
     def homepage(self):
@@ -119,7 +124,6 @@ class WindowClass(QMainWindow, snack_bar):
         self.c.execute(f'SELECT 아이디 FROM user WHERE 아이디 = "{self.id_check.text()}"')
         checking = self.c.fetchall()
         self.conn.close()
-        print(checking)
         if self.id_check.text() == '':
             QMessageBox.critical(self, "에러", "아이디를 입력해주세요")
         elif checking != ():
@@ -139,7 +143,8 @@ class WindowClass(QMainWindow, snack_bar):
     # 로그인후 가장 먼저 보이는 메뉴 창
     def mainpage(self):
         self.open_db()
-        self.c.execute(f'SELECT 아이디, `사업자 여부` FROM user WHERE 아이디 = "{self.lineEdit.text()}" and 비밀번호 = "{self.lineEdit_2.text()}"')
+        self.c.execute(f'SELECT 아이디, `사업자 여부` FROM user WHERE'
+                       f' 아이디 = "{self.lineEdit.text()}" and 비밀번호 = "{self.lineEdit_2.text()}"')
         self.login_infor = self.c.fetchall()
         self.conn.close()
         if self.login_infor == ():
@@ -155,25 +160,23 @@ class WindowClass(QMainWindow, snack_bar):
 
     # 문의하기 게시판
     def question(self):
-
         self.stackedWidget.setCurrentIndex(3)
         self.open_db()
         self.c.execute("SELECT * from snack.question")
         self.questionlist = self.c.fetchall()
-        # print(self.questionlist)
-        self.QandA_list.setRowCount(len(self.questionlist))
-        self.QandA_list.setColumnCount(len(self.questionlist[0]))
-        self.QandA_list.setHorizontalHeaderLabels(['주문번호', '아이디', '내용', '시간', '답변'])
-        for i in range(len(self.questionlist)):
-            for j in range(len(self.questionlist[i])):
-                self.QandA_list.setItem(i, j, QTableWidgetItem(str(self.questionlist[i][j])))
-        self.QandA_list.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        if self.questionlist:
+            self.QandA_list.setRowCount(len(self.questionlist))
+            self.QandA_list.setColumnCount(len(self.questionlist[0]))
+            self.QandA_list.setHorizontalHeaderLabels(['주문번호', '아이디', '내용', '시간', '답변'])
+            for i in range(len(self.questionlist)):
+                for j in range(len(self.questionlist[i])):
+                    self.QandA_list.setItem(i, j, QTableWidgetItem(str(self.questionlist[i][j])))
+            self.QandA_list.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         self.conn.close()
 
     def question_add(self):
         self.time = dt.datetime.now()
         self.today = self.time.strftime('%Y-%m-%d %H:%M:%S')
-        print(self.today)
         check = QMessageBox.question(self, ' ', '등록 하겠습니까?', QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
         if check == QMessageBox.Yes:
             self.open_db()
@@ -182,7 +185,6 @@ class WindowClass(QMainWindow, snack_bar):
             self.conn.commit()
             self.c.execute("SELECT * from snack.question")
             self.questionlist = self.c.fetchall()
-            print(self.questionlist)
             self.conn.close()
             self.QandA_list.setRowCount(len(self.questionlist))
             self.QandA_list.setColumnCount(len(self.questionlist[0]))
@@ -199,7 +201,6 @@ class WindowClass(QMainWindow, snack_bar):
         self.open_db()
         self.c.execute("SELECT * from snack.question")
         questionlist = self.c.fetchall()
-        print(questionlist)
         # 문의가 있을경우
         if questionlist:
             self.QandA_list.setRowCount(len(questionlist))
@@ -209,32 +210,6 @@ class WindowClass(QMainWindow, snack_bar):
                 for j in range(len(questionlist[i])):
                     self.QandA_list.setItem(i, j, QTableWidgetItem(str(questionlist[i][j])))
         self.conn.close()
-
-    def question_add(self):
-        self.time = dt.datetime.now()
-        self.today = self.time.strftime('%Y-%m-%d %H:%M:%S')
-        check = QMessageBox.question(self, ' ', '등록 하겠습니까?', QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
-        if check == QMessageBox.Yes:
-            QMessageBox.information(self, ' ', '문의가 등록되었습니다.')
-            self.open_db()
-            self.c.execute(f"insert into snack.question (아이디,내용,시간) values"
-                           f" ('{self.login_infor[0][0]}','{self.QandA_lineEdit.text()}','{self.today}')")
-            self.conn.commit()
-            self.c.execute("SELECT * from snack.question")
-            self.questionlist = self.c.fetchall()
-            print(self.questionlist)
-            self.conn.close()
-
-            self.QandA_list.setRowCount(len(self.questionlist))
-            self.QandA_list.setColumnCount(len(self.questionlist[0]))
-            self.QandA_list.setHorizontalHeaderLabels(['주문번호', '아이디', '내용', '시간', '답변'])
-            for i in range(len(self.questionlist)):
-                for j in range(len(self.questionlist[i])):
-                    self.QandA_list.setItem(i, j, QTableWidgetItem(str(self.questionlist[i][j])))
-            self.QandA_list.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-            QMessageBox.information(self, ' ', '문의가 등록되었습니다.')
-        else:
-            QMessageBox.information(self, ' ', '상품주문으로 돌아갑니다.')
 
     # 관리자 재고확인하기
     def inventory_view(self):
@@ -284,6 +259,7 @@ class WindowClass(QMainWindow, snack_bar):
         self.total_bill = 0
         self.request_list = []
         # 장바구니에서 메뉴고르는 페이지로 돌아왔을때 다 0으로 초기화해주면 다시 고르려는것도 사라지니까 이거 생각좀 해야할듯
+
         if self.kimbap_plus.value() != 0:
             self.request_list.append(['김밥', str(self.kimbap_plus.value()),
                                       str(self.kimbap_plus.value() * 9000)])
@@ -308,7 +284,6 @@ class WindowClass(QMainWindow, snack_bar):
         if self.tuna_Stew_plus.value() != 0:
             self.request_list.append(['참치김치찌개', str(self.tuna_Stew_plus.value()),
                                       str(self.tuna_Stew_plus.value()*18000)])
-        print(self.request_list)
         self.stackedWidget.setCurrentIndex(5)
         if self.request_list != []:
             self.tablesetting()
@@ -363,19 +338,18 @@ class WindowClass(QMainWindow, snack_bar):
         self.open_db()
         self.c.execute("SELECT * from snack.question")
         self.questionlist = self.c.fetchall()
-        print(self.questionlist)
-        print(self.manager_question_view.currentRow())
-
-        self.manager_question_view.setRowCount(len(self.questionlist))
-        self.manager_question_view.setColumnCount(len(self.questionlist[0]))
-        self.manager_question_view.setHorizontalHeaderLabels(['주문번호', '아이디', '내용', '시간', '답변'])
-        for i in range(len(self.questionlist)):
-            for j in range(len(self.questionlist[i])):
-                self.manager_question_view.setItem(i, j, QTableWidgetItem(str(self.questionlist[i][j])))
-        self.manager_question_view.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        if self.questionlist:
+            self.manager_question_view.setRowCount(len(self.questionlist))
+            self.manager_question_view.setColumnCount(len(self.questionlist[0]))
+            self.manager_question_view.setHorizontalHeaderLabels(['주문번호', '아이디', '내용', '시간', '답변'])
+            for i in range(len(self.questionlist)):
+                for j in range(len(self.questionlist[i])):
+                    self.manager_question_view.setItem(i, j, QTableWidgetItem(str(self.questionlist[i][j])))
+            self.manager_question_view.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         self.conn.close()
 
     def del_request(self):
+
         QMessageBox.information(self, "확인", "장바구니에서 삭제합니다")
         list_row = self.tableWidget_2.currentRow()
         del_list = self.request_list[list_row]
@@ -407,7 +381,6 @@ class WindowClass(QMainWindow, snack_bar):
         self.request_list[list_row][1] = str(cancel_re)
         if cancel_re == 0:
             self.request_list.remove(del_list)
-        print(self.request_list)
         if self.request_list != []:
             self.tablesetting()
         else:
@@ -421,7 +394,7 @@ class WindowClass(QMainWindow, snack_bar):
             self.pig_Stew_plus_3.setValue(0)
             self.tuna_Stew_plus.setValue(0)
             self.tableWidget_2.clear()
-        #1
+
     def tablesetting(self):
         self.total_bill = 0
         for i in range(len(self.request_list)):
@@ -431,6 +404,8 @@ class WindowClass(QMainWindow, snack_bar):
         self.tableWidget_2.setRowCount(len(self.request_list))
         self.tableWidget_2.setColumnCount(len(self.request_list[0]))
         self.tableWidget_2.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.tableWidget_2.setHorizontalHeaderLabels(['품목', '개수', '금액'])
+        self.tableWidget_2.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         for i in range(len(self.request_list)):
             for j in range(len(self.request_list[0])):
                 self.tableWidget_2.setItem(i, j, QTableWidgetItem(self.request_list[i][j]))
@@ -446,7 +421,6 @@ class WindowClass(QMainWindow, snack_bar):
             self.manager_line_add.clear()
             self.c.execute("SELECT * from snack.question")
             self.questionlist = self.c.fetchall()
-            print(self.questionlist)
             self.manager_question_view.setRowCount(len(self.questionlist))
             self.manager_question_view.setColumnCount(len(self.questionlist[0]))
             self.manager_question_view.setHorizontalHeaderLabels(['주문번호', '아이디', '내용', '시간', '답변'])
@@ -467,24 +441,32 @@ class WindowClass(QMainWindow, snack_bar):
             self.conn.commit()
             self.c.execute("SELECT * from snack.question")
             self.questionlist = self.c.fetchall()
-            print(self.questionlist)
             QMessageBox.information(self, ' ', '삭제되었습니다.')
         else:
             QMessageBox.information(self, ' ', '문의함으로 돌아갑니다.')
-
-        self.manager_question_view.setRowCount(len(self.questionlist))
-        self.manager_question_view.setColumnCount(len(self.questionlist[0]))
-        self.manager_question_view.setHorizontalHeaderLabels(['주문번호', '아이디', '내용', '시간', '답변'])
-        for i in range(len(self.questionlist)):
-            for j in range(len(self.questionlist[i])):
-                self.manager_question_view.setItem(i, j, QTableWidgetItem(str(self.questionlist[i][j])))
-        self.manager_question_view.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        # 내용이 있으면
+        if self.questionlist:
+            self.manager_question_view.setRowCount(len(self.questionlist))
+            self.manager_question_view.setColumnCount(len(self.questionlist[0]))
+            self.manager_question_view.setHorizontalHeaderLabels(['주문번호', '아이디', '내용', '시간', '답변'])
+            for i in range(len(self.questionlist)):
+                for j in range(len(self.questionlist[i])):
+                    self.manager_question_view.setItem(i, j, QTableWidgetItem(str(self.questionlist[i][j])))
+            self.manager_question_view.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         self.conn.close()
 
     def cellclicked_event(self, row, col):
-        self.data = self.manager_question_view.item(row,col)
+        self.data = self.manager_question_view.item(row, col)
         self.cellchoice = self.data.text()
-        print(self.cellchoice)
+
+    def showgraph(self):
+        self.fig = plt.Figure()
+        self.figpie = plt.Figure()
+        self.canvas = FigureCanvas(self.fig)
+        self.canvas2 = FigureCanvas(self.figpie)
+        self.verticalLayout.addWidget(self.canvas)
+        ax = self.fig.add_subplot(111)
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
