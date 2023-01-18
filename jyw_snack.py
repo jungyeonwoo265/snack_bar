@@ -30,8 +30,8 @@ class Thread(QThread):
     def open_db(self):
         self.conn = p.connect(host=hos, user=use, password=pw, db='snack', charset='utf8')
         self.c = self.conn.cursor()
-        # 주문 금액 재무db에 저장하기
 
+    # 주문 금액 재무db에 저장하기
     def income(self):
         self.open_db()
         self.c.execute(f"select sum(금액), min(시간) from request where 주문번호 = '{self.store}';")
@@ -44,8 +44,7 @@ class Thread(QThread):
             self.conn.commit()
         self.conn.close()
 
-        # 주문 상품 bom 재고 차감
-
+    # 주문 상품 bom 재고 차감
     def deduction(self):
         self.open_db()
         for v in self.requesr_list:
@@ -57,7 +56,7 @@ class Thread(QThread):
         self.conn.close()
         self.ordering()
 
-        # 식재료 자동 구매 기능
+    # 식재료 자동 구매 기능
     def ordering(self):
         self.open_db()
         self.c.execute(
@@ -81,6 +80,7 @@ class Thread(QThread):
                 self.conn.commit()
         self.conn.close()
 
+    # 문의사항(댓글) 자동등록 기능
     def comment(self):
         com = ['잘먹을게요',
                '많이파세요',
@@ -108,6 +108,7 @@ class Thread(QThread):
         self.p.manager_question_view.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         self.conn.close()
 
+    # 테스트 기능 (자동 주문 및 자동 댓글 작성)
     def run(self):
         while True:
             self.requesr_list = list()
@@ -150,7 +151,6 @@ class Thread(QThread):
             self.p.show_inventory()
             num = random.randrange(10, 15)
             time.sleep(num)
-
 
 
 class WindowClass(QMainWindow, snack_bar):
