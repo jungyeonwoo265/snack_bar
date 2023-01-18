@@ -32,7 +32,7 @@
     <string notr="true"/>
    </property>
    <property name="currentIndex">
-    <number>9</number>
+    <number>6</number>
    </property>
    <widget class="QWidget" name="page">
     <widget class="QLabel" name="label">
@@ -1643,9 +1643,9 @@ color:white;
      <property name="geometry">
       <rect>
        <x>40</x>
-       <y>270</y>
+       <y>220</y>
        <width>841</width>
-       <height>261</height>
+       <height>311</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout"/>
@@ -1680,7 +1680,7 @@ border-style: solid;
        <x>40</x>
        <y>60</y>
        <width>841</width>
-       <height>192</height>
+       <height>151</height>
       </rect>
      </property>
     </widget>
