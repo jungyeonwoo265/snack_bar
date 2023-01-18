@@ -4,6 +4,9 @@ from PyQt5 import uic
 import pymysql as p
 import datetime as dt
 from datetime import datetime
+import matplotlib
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 snack_bar = uic.loadUiType("snack_bar.ui")[0]
 
@@ -47,6 +50,8 @@ class WindowClass(QMainWindow, snack_bar):
         self.payment_button.clicked.connect(self.purchase)
         self.manager_sales_del.clicked.connect(self.manager_question_del)
         self.manager_sales_add.clicked.connect(self.manager_question_add)
+        self.manager_sales.clicked.connect(self.showgraph)
+
 
     # 홈페이지 첫화면
     def homepage(self):
@@ -247,6 +252,7 @@ class WindowClass(QMainWindow, snack_bar):
         self.total_bill = 0
         self.request_list = []
         # 장바구니에서 메뉴고르는 페이지로 돌아왔을때 다 0으로 초기화해주면 다시 고르려는것도 사라지니까 이거 생각좀 해야할듯
+
         if self.kimbap_plus.value() != 0:
             self.request_list.append(['김밥', str(self.kimbap_plus.value()),
                                       str(self.tuna_kimbap_plus_2.value() * 9000)])
@@ -317,6 +323,7 @@ class WindowClass(QMainWindow, snack_bar):
         self.conn.close()
 
     def del_request(self):
+
         QMessageBox.information(self, "확인", "장바구니에서 삭제합니다")
         list_row = self.tableWidget_2.currentRow()
         del_list = self.request_list[list_row]
@@ -371,6 +378,8 @@ class WindowClass(QMainWindow, snack_bar):
         self.tableWidget_2.setRowCount(len(self.request_list))
         self.tableWidget_2.setColumnCount(len(self.request_list[0]))
         self.tableWidget_2.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.tableWidget_2.setHorizontalHeaderLabels(['품목', '개수', '금액'])
+        self.tableWidget_2.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         for i in range(len(self.request_list)):
             for j in range(len(self.request_list[0])):
                 self.tableWidget_2.setItem(i, j, QTableWidgetItem(self.request_list[i][j]))
@@ -423,6 +432,33 @@ class WindowClass(QMainWindow, snack_bar):
     def cellclicked_event(self, row, col):
         self.data = self.manager_question_view.item(row, col)
         self.cellchoice = self.data.text()
+
+    def showgraph(self):
+        # self.fig = plt.Figure()
+        # self.figpie = plt.Figure()
+        # self.canvas = FigureCanvas(self.fig)
+        # self.canvas2 = FigureCanvas(self.figpie)
+        # self.verticalLayout.addWidget(self.canvas)
+        # ax = self.fig.add_subplot(111)
+        #
+        # # 우리나라의 연간 1인당 국민소득을 각각 years, gdp에 저장
+        # years = [1950, 1960, 1970, 1980, 1990, 2000, 2010]
+        # gdp = [67.0, 80.0, 257.0, 1686.0, 6505, 11865.3, 22105.3]
+        #
+        # # 선 그래프를 그린다. x축에는 years값, y축에는 gdp값을 표시한다.
+        # plt.plot(years, gdp, color='green', marker='o', linestyle='solid')
+        #
+        # # 제목을 설정한다.
+        # plt.title('GDP per capita')  # 1인당 국민소득
+        #
+        # # y축에 레이블을 붙인다.
+        # plt.ylabel('dollars')
+        # plt.savefig('gdp_per_capita.png', dpi=600)
+        pass
+
+
+
+        # pass
 
 
 if __name__ == "__main__":
