@@ -20,42 +20,67 @@ class WindowClass(QMainWindow, snack_bar):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-
+        # 첫 페이지 고정
         self.stackedWidget.setCurrentIndex(0)
+
+        # 로그인후 들어가기 버튼 클릭시 주문창으로 이동
         self.mainpage_button.clicked.connect(self.mainpage)
+        # 첫 페이지의 회원가입 버튼클릭시 회원가입창으로 이동
         self.signup_main_button.clicked.connect(self.signup_page)
+        # 회원가입 페이지속 취소 버튼클릭시 첫 화면으로 이동
         self.signup_cancle_button.clicked.connect(self.homepage)
-        self.question_add_button.clicked.connect(self.question_add)
-        self.question_cancle_button.clicked.connect(self.mainpage)
-        self.back_button.clicked.connect(self.manager_page)
-        self.manager_question.clicked.connect(self.manager_page)
-        self.manager_question.clicked.connect(self.question)
-        self.manager_inventory.clicked.connect(self.manager_page)
-        self.manager_inventory.clicked.connect(self.inventory_view)
-        self.salesback_button.clicked.connect(self.manager_page)
-        self.payment_cancle_button.clicked.connect(self.mainpage)
-        self.question_button.clicked.connect(self.question)
-        self.shopping_button.clicked.connect(self.shopping_basket)
-        self.payment_cancle_button.clicked.connect(self.mainpage)
-        self.salesback_button.clicked.connect(self.mainpage)
+        # 회원가입 페이지속 확인 버튼클릭시 로그인화면으로 이동
         self.signup_confirm_button.clicked.connect(self.signup)
-        self.manager_inventory.clicked.connect(self.question)
-        self.manager_question.clicked.connect(self.question_view)
-        self.manager_inventory.clicked.connect(self.inventory_view)
-        self.manager_sales.clicked.connect(self.sales_view)
+        # 회원가입 페이지속 중복확인 버튼클릭시 중복확인함수 실행
         self.overlap_button.clicked.connect(self.double_check)
+
+        # 구매자가 문의하기 페이지속 문의하기 버튼클릭시 게시글 업로드
+        self.question_add_button.clicked.connect(self.question_add)
+        # 구매자가 문의하기 페이지속 취소하기 버튼클릭시 메인화면으로 이동
+        self.question_cancle_button.clicked.connect(self.mainpage)
+        # 구매자의 장바구니 속 취소버튼 클릭시 메인페이지로 이동
+        self.payment_cancle_button.clicked.connect(self.mainpage)
+        # 구매자의 메인페이지속 문의하기 버튼클릭시 문의게시판으로 이동
+        self.question_button.clicked.connect(self.question)
+        # 구매자의 메인페이지속 장바구니 버튼클릭시 장바구니 게시판으로 이동
+        self.shopping_button.clicked.connect(self.shopping_basket)
+        # 구매자의 장바구니페이지속 취소 버튼클릭시 메인페이지로 이동
+        self.payment_cancle_button.clicked.connect(self.mainpage)
+        # 구매자의 메인페이지속 로그아웃 버튼클릭시 로그인화면으로 이동
         self.logout_main_button.clicked.connect(self.homepage)
-        self.logout_manager_button.clicked.connect(self.homepage)
-        self.manager_question.clicked.connect(self.question_view)
-        self.manager_sales_del.clicked.connect(self.manager_question_del)
-        self.manager_question_view.cellClicked.connect(self.cellclicked_event)
-        self.manager_question_view.cellDoubleClicked.connect(self.cellclicked_event)
-        self.manager_sales_add.clicked.connect(self.manager_question_add)
-        self.logout_manager_button_3.clicked.connect(self.manager_page)
+        # 구매자의 장바구니속 테이블위젯 클릭시 삭제를 위한 함수실행-------------
         self.tableWidget_2.cellDoubleClicked.connect(self.del_request)
         self.shopping_list_del.clicked.connect(self.del_request)
+        # 구매자의 장바구니속 주문하기 버튼클릭시 주문서로 이동시키는 함수실행
         self.payment_button.clicked.connect(self.purchase)
+
+        # 관리자메인페이지의 문의함보기 버튼클릭시 문의하기 게시판으로 이동
+        self.manager_question.clicked.connect(self.question_view)
+        # 관리자 문의하기테이블위젯속 셀 클릭시 내용호출을 위한 함수실행 ----------------------
+        self.manager_question_view.cellClicked.connect(self.cellclicked_event)
+        self.manager_question_view.cellDoubleClicked.connect(self.cellclicked_event)
+        # 관리자의 문의하기 게시판속 삭제하기 버튼클릭시 게시글삭제함수 실행
+        self.manager_sales_del.clicked.connect(self.manager_question_del)
+        # 관리자의 문의하기 게시판속 답변달기 버튼클릭시 게시글추가함수 실행
+        self.manager_sales_add.clicked.connect(self.manager_question_add)
+        # 관리자의 문의하기 게시판 속 취소 버튼클릭시 관리자메인페이지 이동
+        self.logout_manager_button_3.clicked.connect(self.manager_page)
+
+        # 관리자메인페이지속 매출확인 버튼클릭시 매출확인 게시판으로 이동
         self.manager_sales.clicked.connect(self.showgraph)
+        # 관리자 매출확인페이지속 취소 버튼클릭시 관리자메인페이지로 이동
+        self.salesback_button.clicked.connect(self.manager_page)
+        # 관지라매출확인하기페이지속 돌아가기 버튼클릭시 관리자메인페이지로 이동
+        self.salesback_button.clicked.connect(self.mainpage)
+
+        # 관리자메인페이지속 재고관리 버튼클릭시 재고관리 게시판으로 이동
+        self.manager_inventory.clicked.connect(self.inventory_view)
+        # 관리자재고관리페이지속 취소버튼 클릭시 관리자메인 페이지로 이동
+        self.back_button.clicked.connect(self.manager_page)
+
+        # 관리자의 메인페이지속 로그아웃 버튼클릭시 로그인화면으로 이동
+        self.logout_manager_button.clicked.connect(self.homepage)
+
 
     # 홈페이지 첫화면
     def homepage(self):
@@ -326,10 +351,6 @@ class WindowClass(QMainWindow, snack_bar):
             self.c.execute(f"select a.재료, a.수량 as 소모량, b.수량 as 재고 from bom a left join inventory b on a.재료 =b.재료 where 상품명='김밥';")
         self.conn.close()
 
-    # 관리자 매출확인
-    def sales_view(self):
-        self.stackedWidget.setCurrentIndex(6)
-
     # 관리자용 메인화면
     def manager_page(self):
         self.open_db()
@@ -484,6 +505,7 @@ class WindowClass(QMainWindow, snack_bar):
         self.cellchoice = self.data.text()
 
     def showgraph(self):
+        self.stackedWidget.setCurrentIndex(6)
         self.fig = plt.Figure()
         self.figpie = plt.Figure()
         self.canvas = FigureCanvas(self.fig)
