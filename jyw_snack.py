@@ -62,7 +62,7 @@ class Thread(QThread):
     def ordering(self):
         self.open_db()
         self.c.execute(
-            f'select a.재료, if(max(a.수량)*20 > min(b.수량), "구매", "보류"), min(b.단가) '
+            f'select a.재료, if(max(a.수량)*10 > min(b.수량), "구매", "보류"), min(b.단가) '
             f'from bom a left join inventory b on a.재료 = b.재료 group by 재료;')
         article = self.c.fetchall()
         article_list = list()
@@ -72,9 +72,6 @@ class Thread(QThread):
                 self.c.execute(f'update inventory set 수량 = 수량 + 구매량 where 재료 ="{i[0]}";')
                 article_list.append([i[0], i[2]])
                 self.conn.commit()
-                self.p.auto_refill.show()
-                time.sleep(2)
-                self.p.auto_refill.hide()
         # 재무표에 구매 list 추가
         if article_list:
             for i in article_list:
@@ -83,6 +80,9 @@ class Thread(QThread):
                 self.c.execute(
                     f'insert into finance values("{fin[0] + 1}","{i[0]}구매",0,{i[1]},{fin[1] - i[1]},now());')
                 self.conn.commit()
+            self.p.auto_refill.show()
+            time.sleep(2)
+            self.p.auto_refill.hide()
         self.conn.close()
 
     # 문의사항(댓글) 자동등록 기능
@@ -101,9 +101,6 @@ class Thread(QThread):
             self.c.execute(f"insert into question values"
                            f"('{self.store}','{i[0]}','{self.user[0]}','{random.choice(com)}','{self.today}','');")
         self.conn.commit()
-        self.p.question_auto.show()
-        time.sleep(2)
-        self.p.question_auto.hide()
         # 문의한 내용을 리스트로 바로 보여주기 위한 커서
         self.c.execute("SELECT * from snack.question")
         self.questionlist = self.c.fetchall()
@@ -115,6 +112,9 @@ class Thread(QThread):
                 self.p.manager_question_view.setItem(i, j, QTableWidgetItem(str(self.questionlist[i][j])))
         self.p.manager_question_view.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         self.conn.close()
+        self.p.question_auto.show()
+        time.sleep(2)
+        self.p.question_auto.hide()
 
     # 문의 게시판 갱신
     def show_question(self):
@@ -167,11 +167,11 @@ class Thread(QThread):
                 self.c.execute(f"insert into request values('{self.store}','{self.user[0]}','{v[0]}','{v[1]}','{v[2]}', now());")
             self.conn.commit()
             self.conn.close()
-            # self.incom()을 위해 추가
-            self.income()
             self.p.order_alram.show()
             time.sleep(2)
             self.p.order_alram.hide()
+            # self.incom()을 위해 추가
+            self.income()
             # self.deduction()을 위해 추가
             self.deduction()
             self.comment()

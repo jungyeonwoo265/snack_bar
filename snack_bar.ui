@@ -16,8 +16,8 @@
   <widget class="QStackedWidget" name="stackedWidget">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>10</y>
+     <x>13</x>
+     <y>8</y>
      <width>921</width>
      <height>581</height>
     </rect>
