@@ -66,19 +66,21 @@ class WindowClass(QMainWindow, snack_bar):
         self.manager_sales_add.clicked.connect(self.manager_question_add)
         # 관리자의 문의하기 게시판 속 취소 버튼클릭시 관리자메인페이지 이동
         self.logout_manager_button_3.clicked.connect(self.manager_page)
-
         # 관리자메인페이지속 매출확인 버튼클릭시 매출확인 게시판으로 이동
         self.manager_sales.clicked.connect(self.showgraph)
         # 관리자매출확인페이지속 취소 버튼클릭시 관리자메인페이지로 이동
         self.salesback_button.clicked.connect(self.show_back_b)
-
         # 관리자메인페이지속 재고관리 버튼클릭시 재고관리 게시판으로 이동
         self.manager_inventory.clicked.connect(self.inventory_view)
         # 관리자재고관리페이지속 취소버튼 클릭시 관리자메인 페이지로 이동
         self.back_button.clicked.connect(self.manager_page)
-
         # 관리자의 메인페이지속 로그아웃 버튼클릭시 로그인화면으로 이동
         self.logout_manager_button.clicked.connect(self.homepage)
+
+        # 관리자메인페이지속 신제품추가 버튼클릭시 신제품추가 게시판으로 이동
+        self.manager_sales_2.clicked.connect(self.addNew)
+        self.cancel_btn.clicked.connect(self.manager_page)
+
 
     # 홈페이지 첫화면
     def homepage(self):
@@ -125,7 +127,7 @@ class WindowClass(QMainWindow, snack_bar):
             elif self.seller_Confirm_button.isChecked():
                 information = self.seller_Confirm_button.text()
             self.open_db()
-            self.c.execute(f'INSERT INTO user (아이디, 비밀번호, 이름, 주소, 전화번호, `사업자 여부`) VALUES'
+            self.c.execute(f'INSERT INTO user (아이디, 비밀번호, 이름, 주소, 전화번호, `사업자`) VALUES'
                            f' ("{self.id_check.text()}", "{self.pw_check.text()}", "{self.name_check.text()}",'
                            f' "{self.add_check.text()}", "{self.phon_check.text()}", "{information}")')
             self.conn.commit()
@@ -163,7 +165,7 @@ class WindowClass(QMainWindow, snack_bar):
     # 로그인후 가장 먼저 보이는 메뉴 창
     def mainpage(self):
         self.open_db()
-        self.c.execute(f'SELECT 아이디, `사업자 여부` FROM user WHERE'
+        self.c.execute(f'SELECT 아이디, `사업자` FROM user WHERE'
                        f' 아이디 = "{self.lineEdit.text()}" and 비밀번호 = "{self.lineEdit_2.text()}"')
         self.login_infor = self.c.fetchall()
         self.conn.close()
@@ -171,7 +173,8 @@ class WindowClass(QMainWindow, snack_bar):
             QMessageBox.critical(self, "에러", "아이디나 비밀번호가 틀립니다.")
         else:
             if self.login_infor[0][1] == '개인':
-                self.stackedWidget.setCurrentIndex(2)
+                QtWidgets.QMessageBox.about(self, " ", "개인회원은 사용할수없습니다.")
+                self.stackedWidget.setCurrentIndex(0)
             elif self.login_infor[0][1] == '사업자':
                 self.manager_page()
 
@@ -194,37 +197,6 @@ class WindowClass(QMainWindow, snack_bar):
             # self.QandA_list.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
             self.QandA_list.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.conn.close()
-
-    # 구매자가 문의하기 게시판에 글을 남겼을때
-    # def question_add(self):
-    #     self.time = dt.datetime.now()
-    #     self.today = self.time.strftime('%Y-%m-%d %H:%M:%S')
-    #     check = QMessageBox.question(self, ' ', '등록 하겠습니까?', QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
-    #     # 등록여부를 물어본뒤 ok 버튼을 눌렀을때
-    #     if check == QMessageBox.Yes:
-    #         self.open_db()
-    #         # 로그인된 고객의 아이디와 문의내용을 저장시켜준다
-    #         self.c.execute(f"insert into snack.question (아이디,내용,시간) values "
-    #                        f"('{self.login_infor[0][0]}','{self.QandA_lineEdit.text()}','{self.today}')")
-    #         self.conn.commit()
-    #         QMessageBox.information(self, ' ', '문의가 등록되었습니다.')
-    #         # 문의한 내용을 리스트로 바로 보여주기 위한 커서
-    #         self.c.execute("select 주문번호,아이디,내용,시간,답변 from snack.question")
-    #         self.questionlist = self.c.fetchall()
-    #         self.QandA_list.setRowCount(len(self.questionlist))
-    #         self.QandA_list.setColumnCount(len(self.questionlist[0]))
-    #         self.QandA_list.setHorizontalHeaderLabels(['주문번호', '아이디', '내용', '시간', '답변'])
-    #         for i in range(len(self.questionlist)):
-    #             for j in range(len(self.questionlist[i])):
-    #                 self.QandA_list.setItem(i, j, QTableWidgetItem(str(self.questionlist[i][j])))
-    #         self.QandA_list.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-    #         self.QandA_lineEdit.clear()
-    #
-    #     else:
-    #         # 문의하기를 취소했을 경우
-    #         QMessageBox.information(self, ' ', '상품주문으로 돌아갑니다.')
-    #     self.conn.close()
-
 
     # 관리자 재고확인하기
     def inventory_view(self):
@@ -512,13 +484,57 @@ class WindowClass(QMainWindow, snack_bar):
         self.cellchoice = self.data.text()
 
     def showgraph(self):
+        date_list =[]
+        date_price = []
+        date_cost = []
+
+        self.open_db()
+        self.c.execute("select 시간 , sum(수입), sum(지출) from (select date(시간) as 시간, 수입, 지출 from snack.finance) as a group by a.시간")
+        self.questionlist = self.c.fetchall()
+        for i in range(len(self.questionlist)):
+            date_list.append(self.questionlist[i][0])
+            # for j in range(len(self.questionlist)):
+            date_price.append(self.questionlist[i][1])
+            date_cost.append(self.questionlist[i][2])
+
+
+        for i in range(len(date_list)):
+            print(date_list[i])
+
+        for i in range(len(date_price)):
+            print(date_price[i])
+
+        for i in range(len(date_cost)):
+            print(date_cost[i])
+
+        print(date_list)
+        print(date_price)
+        print(date_cost)
+
         self.stackedWidget.setCurrentIndex(6)
+        self.open_db()
+        # 삭제를 실시간으로 보여주기 위한 커서
+        self.c.execute("select 시간 , sum(수입), sum(지출) from (select date(시간) as 시간, 수입, 지출 from snack.finance) as a group by a.시간")
+        self.questionlist = self.c.fetchall()
+        self.tableWidget.setRowCount(len(self.questionlist))
+        self.tableWidget.setColumnCount(len(self.questionlist[0]))
+        self.tableWidget.setHorizontalHeaderLabels(['시간','수입','지출'])
+        for i in range(len(self.questionlist)):
+            for j in range(len(self.questionlist[i])):
+                self.tableWidget.setItem(i, j, QTableWidgetItem(str(self.questionlist[i][j])))
+        self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
         self.fig = plt.Figure()
         self.figpie = plt.Figure()
         self.canvas = FigureCanvas(self.fig)
         self.verticalLayout.addWidget(self.canvas)
         ax = self.fig.add_subplot(111)
-        ax.set_title('매출 및 순이익')
+        # 꺽은선그래프
+        ax.plot(date_list, date_cost, 'r', label="순이익")
+        # 막대그래프
+        ax.bar(date_list, date_price, label="매출액")
+        ax.set_title("매출액, 순수익")
+        ax.legend()
         self.canvas.draw()
 
     def show_back_b(self):
@@ -553,6 +569,9 @@ class WindowClass(QMainWindow, snack_bar):
                 # self.QandA_list.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
                 self.QandA_list.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
                 self.QandA_lineEdit.clear()
+
+    def addNew(self):
+        self.stackedWidget.setCurrentIndex(9)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
