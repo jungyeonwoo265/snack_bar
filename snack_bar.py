@@ -113,6 +113,7 @@ class Thread(QThread):
     # 테스트 기능 (자동 주문 및 자동 댓글 작성)
     def run(self):
         while True:
+            print('1')
             self.requesr_list = list()
             menu_list = list()
             # lock.acquire()
@@ -151,6 +152,7 @@ class Thread(QThread):
             # self.deduction()을 위해 추가
             self.deduction()
             self.comment()
+            time.sleep(0.1)
             self.p.show_inventory()
             # lock.release()
             num = random.randrange(10, 15)
@@ -396,6 +398,8 @@ class WindowClass(QMainWindow, snack_bar):
     # 재고 보여주기
     def show_inventory(self):
         head = ['재료', '수량', '단위']
+        self.inventorylist.setRowCount(0)
+        self.inventorylist.setColumnCount(0)
         self.open_db()
         self.c.execute(f"select 재료,수량,단위 from inventory;")
         inven = self.c.fetchall()
