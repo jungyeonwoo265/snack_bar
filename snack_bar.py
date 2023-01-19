@@ -624,51 +624,52 @@ class WindowClass(QMainWindow, snack_bar):
     def showgraph(self):
         date_list = []
         date_price = []
-        self.stackedWidget.setCurrentIndex(6)
-        self.open_db()
-        # 삭제를 실시간으로 보여주기 위한 커서
-        self.c.execute("SELECT 금액,시간 FROM snack.request;")
-        self.questionlist = self.c.fetchall()
-        self.tableWidget.setRowCount(len(self.questionlist))
-        self.tableWidget.setColumnCount(len(self.questionlist[0]))
-        self.tableWidget.setHorizontalHeaderLabels(['금액','시간'])
-        for i in range(len(self.questionlist)):
-            for j in range(len(self.questionlist[i])):
-                self.tableWidget.setItem(i, j, QTableWidgetItem(str(self.questionlist[i][j])))
-        self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        self.c.execute("SELECT 시간 FROM snack.request;")
-        self.questionlist = self.c.fetchall()
-        for i in range(len(self.questionlist)):
-            a = self.questionlist[i][0].split(" ")
-            print(a[0])
-            date_list.append(a[0])
-
-        self.c.execute("SELECT sum(금액) FROM snack.request group by 시간")
-        self.questionlist = self.c.fetchall()
-        for i in range(len(self.questionlist)):
-            a = self.questionlist[i][0].split(" ")
-            print(a[0])
-            date_price.append(int(a[0]))
-
-        print(date_list)
-        print(date_price)
-
-        self.fig = plt.Figure()
-        self.figpie = plt.Figure()
-        self.canvas = FigureCanvas(self.fig)
-        self.verticalLayout.addWidget(self.canvas)
-        date_total_cost=[7200,16400,1800,19800]
-        date_total_price = [1000,2000,3000,4000]
-        ax = self.fig.add_subplot(111)
-        # 꺽은선그래프
-        ax.plot(date_list, date_total_cost, 'r', label="순이익")
-        # 막대그래프
-        ax.bar(date_list, date_price, label="매출액")
-        # ax.set_xlabel("날짜")
-        # ax.set_ylabel("가격")
-        ax.set_title("매출액, 순수익")
-        ax.legend()
-        self.canvas.draw()
+        # self.stackedWidget.setCurrentIndex(6)
+        # self.open_db()
+        # # 삭제를 실시간으로 보여주기 위한 커서
+        # self.c.execute("SELECT 금액,시간 FROM snack.request;")
+        # self.questionlist = self.c.fetchall()
+        # self.tableWidget.setRowCount(len(self.questionlist))
+        # self.tableWidget.setColumnCount(len(self.questionlist[0]))
+        # self.tableWidget.setHorizontalHeaderLabels(['금액','시간'])
+        # for i in range(len(self.questionlist)):
+        #     for j in range(len(self.questionlist[i])):
+        #         self.tableWidget.setItem(i, j, QTableWidgetItem(str(self.questionlist[i][j])))
+        # self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        # self.c.execute("SELECT 시간 FROM snack.request;")
+        # self.questionlist = self.c.fetchall()
+        # for i in range(len(self.questionlist)):
+        #     a = self.questionlist[i][0].split(" ")
+        #     print(a[0])
+        #     date_list.append(a[0])
+        #
+        # self.c.execute("SELECT sum(금액) FROM snack.request group by 시간")
+        # self.questionlist = self.c.fetchall()
+        # for i in range(len(self.questionlist)):
+        #     a = self.questionlist[i][0].split(" ")
+        #     print(a[0])
+        #     date_price.append(int(a[0]))
+        #
+        # print(date_list)
+        # print(date_price)
+        #
+        # self.fig = plt.Figure()
+        # self.figpie = plt.Figure()
+        # self.canvas = FigureCanvas(self.fig)
+        # self.verticalLayout.addWidget(self.canvas)
+        # date_total_cost=[7200,16400,1800,19800]
+        # date_total_price = [1000,2000,3000,4000]
+        # ax = self.fig.add_subplot(111)
+        # # 꺽은선그래프
+        # ax.plot(date_list, date_total_cost, 'r', label="순이익")
+        # # 막대그래프
+        # ax.bar(date_list, date_price, label="매출액")
+        # # ax.set_xlabel("날짜")
+        # # ax.set_ylabel("가격")
+        # ax.set_title("매출액, 순수익")
+        # ax.legend()
+        # self.canvas.draw()
+        pass
 
     def show_back_b(self):
         self.verticalLayout.removeWidget(self.canvas)
