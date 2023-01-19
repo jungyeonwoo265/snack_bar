@@ -28,6 +28,8 @@ class Thread(QThread):
         super().__init__(windowclass)
         self.p = windowclass
         self.requesr_list = list()
+        self.show_question()
+        self.p.show_inventory()
 
     def open_db(self):
         self.conn = p.connect(host=hos, user=use, password=pw, db='snack', charset='utf8')
@@ -80,6 +82,8 @@ class Thread(QThread):
                 self.c.execute(
                     f'insert into finance values("{fin[0] + 1}","{i[0]}구매",0,{i[1]},{fin[1] - i[1]},now());')
                 self.conn.commit()
+            self.p.show_inventory()
+            # 재료 구매 알람
             self.p.auto_refill.show()
             time.sleep(2)
             self.p.auto_refill.hide()
@@ -101,17 +105,10 @@ class Thread(QThread):
             self.c.execute(f"insert into question values"
                            f"('{self.store}','{i[0]}','{self.user[0]}','{random.choice(com)}','{self.today}','');")
         self.conn.commit()
-        # 문의한 내용을 리스트로 바로 보여주기 위한 커서
-        self.c.execute("SELECT * from snack.question")
-        self.questionlist = self.c.fetchall()
-        self.p.manager_question_view.setRowCount(len(self.questionlist))
-        self.p.manager_question_view.setColumnCount(len(self.questionlist[0]))
-        self.p.manager_question_view.setHorizontalHeaderLabels(['주문번호', '아이디', '내용', '시간', '답변'])
-        for i in range(len(self.questionlist)):
-            for j in range(len(self.questionlist[i])):
-                self.p.manager_question_view.setItem(i, j, QTableWidgetItem(str(self.questionlist[i][j])))
-        self.p.manager_question_view.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         self.conn.close()
+        # 문의한 내용을 바로 보여주기
+        self.show_question()
+        # 문의 등록 알람
         self.p.question_auto.show()
         time.sleep(2)
         self.p.question_auto.hide()
@@ -128,6 +125,7 @@ class Thread(QThread):
             for i in range(len(self.questionlist)):
                 for j in range(len(self.questionlist[i])):
                     self.p.manager_question_view.setItem(i, j, QTableWidgetItem(str(self.questionlist[i][j])))
+            self.p.manager_question_view.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         self.conn.close()
 
     # 테스트 기능 (자동 주문 및 자동 댓글 작성)
@@ -136,7 +134,6 @@ class Thread(QThread):
             print(1)
             self.requesr_list = list()
             menu_list = list()
-            # lock.acquire()
             self.open_db()
             # 메뉴 제품명, 가격 불러오기
             self.c.execute(f"select 상품, 단가 from menu")
@@ -144,14 +141,14 @@ class Thread(QThread):
             # 중복 메뉴 석택을 없애기 위해 list로 변경
             for i in menu:
                 menu_list.append([i[0], i[1]])
-            # 랜덤 메뉴 종류수 선택
+            # 랜덤 으로 주문 종류수 선택
             menu_num = random.randint(1, len(menu))
             # 주문서 만들기
             for i in range(menu_num):
-                # 중복되지 않는 랜덤 메뉴 구하기
+                # 중복되지 않게 랜덤 으로 메뉴 선택하기
                 menu_infor = random.choice(menu_list)
                 menu_list.pop(menu_list.index(menu_infor))
-                # 랜덤 메뉴수량 구하기
+                # 랜덤 으로 메뉴 수량 구하기
                 order_num = random.randrange(1, 4)
                 # request_list [제품명, 수량 , 가격]
                 self.requesr_list.append([menu_infor[0], order_num, menu_infor[1]])
@@ -159,25 +156,25 @@ class Thread(QThread):
             self.open_db()
             self.c.execute(f'select 주문번호 from finance order by 주문번호 desc;')
             self.store = self.c.fetchone()[0] + 1
-            # 아이디 구하기
+            # 랜덤 으로 아이디 선택
             self.c.execute(f'select 아이디 from user where 사업자 = "개인";')
             name = self.c.fetchall()
             self.user = random.choice(name)
+            # 주문 내역 등록하기
             for i, v in enumerate(self.requesr_list):
                 self.c.execute(f"insert into request values('{self.store}','{self.user[0]}','{v[0]}','{v[1]}','{v[2]}', now());")
             self.conn.commit()
             self.conn.close()
+            # 주문 알람
             self.p.order_alram.show()
             time.sleep(2)
             self.p.order_alram.hide()
-            # self.incom()을 위해 추가
+            # 수입 등록
             self.income()
-            # self.deduction()을 위해 추가
+            # 재고 차감
             self.deduction()
+            # 문의사항 등록
             self.comment()
-            self.p.show_inventory()
-            self.show_question()
-            # lock.release()
             num = random.randrange(10, 15)
             time.sleep(num)
 
