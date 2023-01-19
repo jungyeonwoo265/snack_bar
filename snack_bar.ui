@@ -32,7 +32,7 @@
     <string notr="true"/>
    </property>
    <property name="currentIndex">
-    <number>6</number>
+    <number>9</number>
    </property>
    <widget class="QWidget" name="page">
     <widget class="QLabel" name="label">
@@ -1643,9 +1643,9 @@ color:white;
      <property name="geometry">
       <rect>
        <x>40</x>
-       <y>220</y>
+       <y>270</y>
        <width>841</width>
-       <height>311</height>
+       <height>261</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout"/>
@@ -1680,7 +1680,7 @@ border-style: solid;
        <x>40</x>
        <y>60</y>
        <width>841</width>
-       <height>151</height>
+       <height>192</height>
       </rect>
      </property>
     </widget>
@@ -2060,31 +2060,12 @@ border-style: solid;
        <height>41</height>
       </rect>
      </property>
-    </widget>
-    <widget class="QComboBox" name="unit_box">
-     <property name="geometry">
-      <rect>
-       <x>860</x>
-       <y>100</y>
-       <width>41</width>
-       <height>41</height>
-      </rect>
+     <property name="inputMethodHints">
+      <set>Qt::ImhNone</set>
      </property>
-     <item>
-      <property name="text">
-       <string>g</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>개</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>장</string>
-      </property>
-     </item>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="QLineEdit" name="new_name">
      <property name="geometry">
@@ -2164,7 +2145,7 @@ border-style: solid;
        <x>720</x>
        <y>220</y>
        <width>191</width>
-       <height>271</height>
+       <height>241</height>
       </rect>
      </property>
     </widget>
@@ -2197,9 +2178,9 @@ border-style: solid;
     <widget class="QTableWidget" name="ingredient">
      <property name="geometry">
       <rect>
-       <x>400</x>
+       <x>375</x>
        <y>90</y>
-       <width>256</width>
+       <width>301</width>
        <height>391</height>
       </rect>
      </property>
@@ -2228,6 +2209,32 @@ border-style: solid;
      </property>
      <property name="text">
       <string>취소</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="cost_label">
+     <property name="geometry">
+      <rect>
+       <x>810</x>
+       <y>470</y>
+       <width>81</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>원가:0원</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="unit_label">
+     <property name="geometry">
+      <rect>
+       <x>875</x>
+       <y>100</y>
+       <width>41</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
      </property>
     </widget>
    </widget>
