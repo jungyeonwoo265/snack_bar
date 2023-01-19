@@ -133,6 +133,7 @@ class Thread(QThread):
                 # request_list [제품명, 수량 , 가격]
                 self.requesr_list.append([menu_infor[0], order_num, menu_infor[1]])
             # 주문번호 구하기
+            self.open_db()
             self.c.execute(f'select 주문번호 from finance order by 주문번호 desc;')
             self.store = self.c.fetchone()[0] + 1
             # 아이디 구하기
@@ -218,10 +219,25 @@ class WindowClass(QMainWindow, snack_bar):
         # 관리자의 메인페이지속 로그아웃 버튼클릭시 로그인화면으로 이동
         self.logout_manager_button.clicked.connect(self.homepage)
 
-        # 관리자메인페이지속 신제품추가 버튼클릭시 신제품추가 게시판으로 이동
-        self.manager_sales_2.clicked.connect(self.addNew)
-        self.cancel_btn.clicked.connect(self.manager_page)
+        # 새메뉴에 필요한 재료 넣는 리스트인데 메서드에 넣으면 거기 메서드갈때마다 초기화되서 과감히 init에 넣음
+        self.store_ingredient = []
+        # 신제품추가 버튼가면 신제품페이지로 이동
+        self.manager_sales_2.clicked.connect(self.adde_screen)
+        # 기존 메뉴 재료들 검색
+        self.food_search.clicked.connect(self.add_food)
+        # 신메뉴에 들어갈 재료 더블클릭시 단위랑 재료이름 옆으로 들어감
+        self.ingredient.cellDoubleClicked.connect(self.add_ingredient)
+        # 아래에 재료 추가됨
+        self.add_btn.clicked.connect(self.plus_ingredient)
+        # 뒤로가기로 관리자 페이지 처음으로 이동함
+        self.cancel_btn.clicked.connect(self.clearMode)
+        # 신메뉴 등록됨
+        self.confirm_btn.clicked.connect(self.confirm_food)
 
+
+    def thread_action(self):
+        t = Thread(self)
+        t.start()
 
     # 홈페이지 첫화면
     def homepage(self):
@@ -244,10 +260,6 @@ class WindowClass(QMainWindow, snack_bar):
         self.tuna_Stew_plus.setValue(0)
         self.tableWidget_2.clear()
         self.stackedWidget.setCurrentIndex(0)
-
-    def thread_action(self):
-        t = Thread(self)
-        t.start()
 
     def open_db(self):
         self.conn = p.connect(host=hos, user=use, password=pw, db='snack', charset='utf8')
@@ -643,8 +655,8 @@ class WindowClass(QMainWindow, snack_bar):
         self.figpie = plt.Figure()
         self.canvas = FigureCanvas(self.fig)
         self.verticalLayout.addWidget(self.canvas)
-        date_total_cost=[7200, 16400, 1800, 19800]
-        date_total_price = [1000, 2000, 3000, 4000]
+        date_total_cost=[7200,16400,1800,19800]
+        date_total_price = [1000,2000,3000,4000]
         ax = self.fig.add_subplot(111)
         # 꺽은선그래프
         ax.plot(date_list, date_total_cost, 'r', label="순이익")
@@ -689,8 +701,112 @@ class WindowClass(QMainWindow, snack_bar):
                 self.QandA_list.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
                 self.QandA_lineEdit.clear()
 
-    def addNew(self):
+    def clearMode(self):                    # 이건 신메뉴 창에 있는 것들 초기화하려고 만든 메서드
+        self.ingredient_name.clear()
+        self.newrecipe.clear()
+        self.new_name.clear()
+        self.price.clear()
+        self.label_14.setText("재료이름")
+        self.unit_label.setText("")
+        self.food_name.clear()
+        self.ingredient_list.clear()
+        self.manager_page()
+
+    def plus_ingredient(self):
+        if self.label_14.text() == '재료이름':
+            QMessageBox.critical(self, '에러', '재료를 선택하세요')
+        elif self.ingredient_name.text() == '':
+            QMessageBox.critical(self, '에러', '수량을 입력하세요')
+        else:
+            add_ingredient_list = [self.label_14.text(), self.ingredient_name.text(), self.unit_label.text()]           # 재료이름, 수량, 단위를 리스트에 넣고
+            self.store_ingredient.append(add_ingredient_list)                                                           # init에 만들었던 리스트에 다시 담는다
+            self.newrecipe.setRowCount(len(self.store_ingredient))                                                      # 다시 안담으면 계속 쌓여지지않고 초기화됨
+            self.newrecipe.setColumnCount(len(self.store_ingredient[0]))
+            self.newrecipe.setEditTriggers(QAbstractItemView.NoEditTriggers)
+            self.newrecipe.setHorizontalHeaderLabels(['재료', '수량', '단위'])
+            for i in range(len(self.store_ingredient)):
+                for j in range(len(self.store_ingredient[0])):
+                    self.newrecipe.setItem(i, j, QTableWidgetItem(str(self.store_ingredient[i][j])))
+            self.open_db()
+            origin_cost = 0
+            for i in range(len(self.store_ingredient)):
+                self.c.execute(
+                    f'select 재료, (단가 / 구매량)*{int(self.store_ingredient[i][1])} 가격 from inventory where 재료 = "{self.store_ingredient[i][0]}"')
+                a = self.c.fetchall()
+                origin_cost += int(a[0][1])
+            self.conn.close()
+            self.cost_label.setText("원가:" + str(origin_cost) + "원")                                                   # 위에 원가 계산해서 넣어줌
+            print(self.store_ingredient, "erwrwefdds")
+
+    def confirm_food(self):
+        self.open_db()
+        self.c.execute(f'select 상품 from menu where 상품 = "{self.new_name.text()}"')                      # 메뉴가 중복되지 않게 메뉴리스트를 비교
+        product_name = self.c.fetchall()
+        self.conn.close()
+        if self.new_name.text() == '':
+            QMessageBox.critical(self, "에러", "상품명을 입력해주세요")
+        elif self.price.text() == '':
+            QMessageBox.critical(self, "에러", "가격을 입력해주세요")
+        elif product_name != ():
+            QMessageBox.critical(self, "에러", "이미 존재하는 메뉴입니다")
+        else:
+            self.open_db()
+            print("fewsd")                                                                                  # 위에 쓴 리스트를 다시 사용해 db에 신메뉴 등록
+            for i in range(len(self.store_ingredient)):
+                self.c.execute(
+                    f'insert into bom (상품명, 재료, 수량, 단위) values ("{self.new_name.text()}", "{self.store_ingredient[i][0]}", "{self.store_ingredient[i][1]}", "{self.store_ingredient[i][2]}")')
+                self.conn.commit()
+            self.c.execute(
+                f'insert into menu (상품, 단가, 단위) values ("{self.new_name.text()}", "{int(self.price.text())}", "개")')
+            self.conn.commit()
+            self.c.close()
+            QMessageBox.information(self, "확인", "메뉴가 등록되었습니다")
+            self.ingredient_name.clear()
+            self.newrecipe.clear()
+            self.new_name.clear()
+            self.price.clear()
+            self.label_14.setText("재료이름")
+            self.unit_label.setText("")
+
+    def add_ingredient(self):                           # 이건 라벨들에 이름 넣어주기
+        row = self.ingredient.currentRow()
+        food_name_e = self.ingredient.item(row, 0).text()
+        food_unit = self.ingredient.item(row, 2).text()
+        self.label_14.setText(food_name_e)
+        self.unit_label.setText(food_unit)
+        self.ingredient_name.clear()
+
+    def adde_screen(self):
+        self.onlyInt = QIntValidator()                  # 수량과 가격에 int형으로만 적을 수 있게 만드는 코드
+        self.ingredient_name.setValidator(self.onlyInt)
+        self.price.setValidator(self.onlyInt)
+        self.open_db()
+        self.c.execute('select 재료, 수량, 단위 from inventory')
+        input_ingredient = self.c.fetchall()
+        self.conn.close()
+        self.ingredient.setRowCount(len(input_ingredient))
+        self.ingredient.setColumnCount(len(input_ingredient[0]))
+        self.ingredient.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.ingredient.setHorizontalHeaderLabels(['재료', '수량', '단위'])
+        for i in range(len(input_ingredient)):
+            for j in range(len(input_ingredient[0])):
+                self.ingredient.setItem(i, j, QTableWidgetItem(str(input_ingredient[i][j])))
         self.stackedWidget.setCurrentIndex(9)
+
+
+    def add_food(self):                                     # 기존 메뉴의 bom검색
+        self.open_db()
+        self.c.execute(f'select * from bom where 상품명 = "{self.food_name.text()}"')
+        need_ingredient = self.c.fetchall()
+        self.conn.close()
+        print(need_ingredient)
+        self.ingredient_list.setRowCount(len(need_ingredient))
+        self.ingredient_list.setColumnCount(len(need_ingredient[0]) - 1)
+        self.ingredient_list.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.ingredient_list.setHorizontalHeaderLabels(['재료', '수량', '단위'])
+        for i in range(len(need_ingredient)):
+            for j in range(len(need_ingredient[0]) - 1):
+                self.ingredient_list.setItem(i, j, QTableWidgetItem(str(need_ingredient[i][j + 1])))
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
