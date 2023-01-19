@@ -113,6 +113,7 @@ class Thread(QThread):
         while True:
             self.requesr_list = list()
             menu_list = list()
+            # lock.acquire()
             self.open_db()
             # 메뉴 제품명, 가격 불러오기
             self.c.execute(f"select 상품, 단가 from menu")
@@ -132,7 +133,6 @@ class Thread(QThread):
                 # request_list [제품명, 수량 , 가격]
                 self.requesr_list.append([menu_infor[0], order_num, menu_infor[1]])
             # 주문번호 구하기
-            self.open_db()
             self.c.execute(f'select 주문번호 from finance order by 주문번호 desc;')
             self.store = self.c.fetchone()[0] + 1
             # 아이디 구하기
@@ -149,6 +149,7 @@ class Thread(QThread):
             self.deduction()
             self.comment()
             self.p.show_inventory()
+            # lock.release()
             num = random.randrange(10, 15)
             time.sleep(num)
 
@@ -642,8 +643,8 @@ class WindowClass(QMainWindow, snack_bar):
         self.figpie = plt.Figure()
         self.canvas = FigureCanvas(self.fig)
         self.verticalLayout.addWidget(self.canvas)
-        date_total_cost=[7200,16400,1800,19800]
-        date_total_price = [1000,2000,3000,4000]
+        date_total_cost=[7200, 16400, 1800, 19800]
+        date_total_price = [1000, 2000, 3000, 4000]
         ax = self.fig.add_subplot(111)
         # 꺽은선그래프
         ax.plot(date_list, date_total_cost, 'r', label="순이익")
