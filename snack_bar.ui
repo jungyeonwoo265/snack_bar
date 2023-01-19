@@ -16,8 +16,8 @@
   <widget class="QStackedWidget" name="stackedWidget">
    <property name="geometry">
     <rect>
-     <x>13</x>
-     <y>8</y>
+     <x>20</x>
+     <y>10</y>
      <width>921</width>
      <height>581</height>
     </rect>
@@ -1449,7 +1449,7 @@ color:white;
        <x>520</x>
        <y>110</y>
        <width>371</width>
-       <height>421</height>
+       <height>171</height>
       </rect>
      </property>
     </widget>
@@ -1478,6 +1478,39 @@ color:white;
      <property name="text">
       <string>재료 발주내역</string>
      </property>
+    </widget>
+    <widget class="QLabel" name="label_15">
+     <property name="geometry">
+      <rect>
+       <x>640</x>
+       <y>300</y>
+       <width>131</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>최대 생산 가능 수</string>
+     </property>
+    </widget>
+    <widget class="QTableWidget" name="maximum_list">
+     <property name="geometry">
+      <rect>
+       <x>520</x>
+       <y>340</y>
+       <width>371</width>
+       <height>192</height>
+      </rect>
+     </property>
+     <column>
+      <property name="text">
+       <string>상품명</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>최대 판매 가능 수</string>
+      </property>
+     </column>
     </widget>
    </widget>
    <widget class="QWidget" name="page_6">

@@ -20,7 +20,7 @@ matplotlib.rc('font', family='Malgun Gothic')
 # db 연결용 정보
 hos = 'localhost'
 use = 'root'
-pw = '0000'
+pw = 'qwer1234'
 
 
 class Thread(QThread):
@@ -74,6 +74,7 @@ class Thread(QThread):
                 self.c.execute(f'update inventory set 수량 = 수량 + 구매량 where 재료 ="{i[0]}";')
                 article_list.append([i[0], i[2]])
                 self.conn.commit()
+        self.p.max_sales()
         # 재무표에 구매 list 추가
         if article_list:
             for i in article_list:
@@ -84,6 +85,7 @@ class Thread(QThread):
                 self.conn.commit()
             # 재고현황 및 재료 발주내역 수정
             self.p.show_inventory()
+            self.p.max_sales()
             self.refill_detail()
             # 재료 구매 알람
             self.p.auto_refill.show()
@@ -101,6 +103,7 @@ class Thread(QThread):
         for i in range(len(refill_list)):
             for j in range(len(refill_list[i])):
                 self.p.inventorylist_2.setItem(i, j, QTableWidgetItem(str(refill_list[i][j])))
+
 
     # 문의사항(댓글) 자동등록 기능
     def comment(self):
@@ -186,6 +189,8 @@ class Thread(QThread):
             self.income()
             # 재고 차감
             self.deduction()
+            # 최대 판매 가능 수량
+            self.p.max_sales()
             # 문의사항 등록
             self.comment()
             num = random.randrange(10, 15)
@@ -883,7 +888,7 @@ class WindowClass(QMainWindow, snack_bar):
                 origin_cost += int(a[0][1])
             self.conn.close()
             self.cost_label.setText("원가:" + str(origin_cost) + "원")                                                   # 위에 원가 계산해서 넣어줌
-            # print(self.store_ingredient, "erwrwefdds")
+
 
     # bom db에 신제품 레시피 등록하기
     def confirm_food(self):
@@ -903,9 +908,7 @@ class WindowClass(QMainWindow, snack_bar):
             QMessageBox.critical(self, "에러", "이미 존재하는 메뉴입니다")
         # 신제품 등록하기
         else:
-            self.open_db()
-            # print("fewsd")
-            # bom db에 레시피 등록
+            self.open_db()                                                                            # 위에 쓴 리스트를 다시 사용해 db에 신메뉴 등록
             for i in range(len(self.store_ingredient)):
                 self.c.execute(
                     f'insert into bom (상품명, 재료, 수량, 단위) values ("{self.new_name.text()}", "{self.store_ingredient[i][0]}", "{self.store_ingredient[i][1]}", "{self.store_ingredient[i][2]}")')
@@ -972,6 +975,22 @@ class WindowClass(QMainWindow, snack_bar):
         for i in range(len(need_ingredient)):
             for j in range(len(need_ingredient[0]) - 1):
                 self.ingredient_list.setItem(i, j, QTableWidgetItem(str(need_ingredient[i][j + 1])))
+
+    def max_sales(self):
+        self.maximum_list.setRowCount(0)
+        self.maximum_list.setColumnCount(0)
+        self.open_db()
+        self.c.execute(f'select 상품명, min(b.수량 div a.수량) as 최대생산량  from bom a left join inventory b on a.재료 =b.재료 group by 상품명;')
+        max_number = self.c.fetchall()
+        self.conn.close()
+        self.maximum_list.setRowCount(len(max_number))
+        self.maximum_list.setColumnCount(len(max_number[0]))
+        self.maximum_list.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.maximum_list.setHorizontalHeaderLabels(['제품', '최대 판매 수량'])
+        for i in range(len(max_number)):
+            for j in range(len(max_number[0])):
+                self.maximum_list.setItem(i, j, QTableWidgetItem(str(max_number[i][j])))
+        self.maximum_list.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
 
 if __name__ == "__main__":
