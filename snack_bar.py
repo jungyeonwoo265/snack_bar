@@ -20,7 +20,7 @@ matplotlib.rc('font', family='Malgun Gothic')
 # db 연결용 정보
 hos = 'localhost'
 use = 'root'
-pw = '0000'
+pw = 'qwer1234'
 
 
 class Thread(QThread):
@@ -72,6 +72,9 @@ class Thread(QThread):
                 self.c.execute(f'update inventory set 수량 = 수량 + 구매량 where 재료 ="{i[0]}";')
                 article_list.append([i[0], i[2]])
                 self.conn.commit()
+                self.p.auto_refill.show()
+                time.sleep(2)
+                self.p.auto_refill.hide()
         # 재무표에 구매 list 추가
         if article_list:
             for i in article_list:
@@ -98,6 +101,9 @@ class Thread(QThread):
             self.c.execute(f"insert into question values"
                            f"('{self.store}','{i[0]}','{self.user[0]}','{random.choice(com)}','{self.today}','');")
         self.conn.commit()
+        self.p.question_auto.show()
+        time.sleep(2)
+        self.p.question_auto.hide()
         # 문의한 내용을 리스트로 바로 보여주기 위한 커서
         self.c.execute("SELECT * from snack.question")
         self.questionlist = self.c.fetchall()
@@ -148,6 +154,9 @@ class Thread(QThread):
             self.conn.close()
             # self.incom()을 위해 추가
             self.income()
+            self.p.order_alram.show()
+            time.sleep(2)
+            self.p.order_alram.hide()
             # self.deduction()을 위해 추가
             self.deduction()
             self.comment()
@@ -235,6 +244,9 @@ class WindowClass(QMainWindow, snack_bar):
         self.cancel_btn.clicked.connect(self.clearMode)
         # 신메뉴 등록됨
         self.confirm_btn.clicked.connect(self.confirm_food)
+        self.order_alram.hide()
+        self.auto_refill.hide()
+        self.question_auto.hide()
 
 
     def thread_action(self):
@@ -716,6 +728,7 @@ class WindowClass(QMainWindow, snack_bar):
         self.label_14.setText("재료이름")
         self.unit_label.setText("")
         self.food_name.clear()
+        self.cost_label.setText("원가:0원")
         self.ingredient_list.clear()
         self.manager_page()
 
@@ -772,6 +785,7 @@ class WindowClass(QMainWindow, snack_bar):
             self.newrecipe.clear()
             self.new_name.clear()
             self.price.clear()
+            self.cost_label.setText("원가:0원")
             self.label_14.setText("재료이름")
             self.unit_label.setText("")
 

@@ -32,7 +32,7 @@
     <string notr="true"/>
    </property>
    <property name="currentIndex">
-    <number>9</number>
+    <number>7</number>
    </property>
    <widget class="QWidget" name="page">
     <widget class="QLabel" name="label">
@@ -1824,6 +1824,45 @@ border-style: solid;
      </property>
      <property name="text">
       <string>신제품추가</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="order_alram">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>60</y>
+       <width>161</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>주문이 들어왔습니다</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="auto_refill">
+     <property name="geometry">
+      <rect>
+       <x>725</x>
+       <y>60</y>
+       <width>151</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>자동 발주되었습니다</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="question_auto">
+     <property name="geometry">
+      <rect>
+       <x>380</x>
+       <y>60</y>
+       <width>181</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>새 문의가 등록되었습니다</string>
      </property>
     </widget>
    </widget>
