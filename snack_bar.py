@@ -1,4 +1,6 @@
 import sys
+
+from PyQt5.QtGui import QIntValidator
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
 import pymysql as p
@@ -793,7 +795,6 @@ class WindowClass(QMainWindow, snack_bar):
                 self.ingredient.setItem(i, j, QTableWidgetItem(str(input_ingredient[i][j])))
         self.stackedWidget.setCurrentIndex(9)
 
-
     def add_food(self):                                     # 기존 메뉴의 bom검색
         self.open_db()
         self.c.execute(f'select * from bom where 상품명 = "{self.food_name.text()}"')
@@ -807,6 +808,7 @@ class WindowClass(QMainWindow, snack_bar):
         for i in range(len(need_ingredient)):
             for j in range(len(need_ingredient[0]) - 1):
                 self.ingredient_list.setItem(i, j, QTableWidgetItem(str(need_ingredient[i][j + 1])))
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
