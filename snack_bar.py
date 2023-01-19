@@ -83,11 +83,24 @@ class Thread(QThread):
                     f'insert into finance values("{fin[0] + 1}","{i[0]}구매",0,{i[1]},{fin[1] - i[1]},now());')
                 self.conn.commit()
             self.p.show_inventory()
+            self.refill_detail()
             # 재료 구매 알람
             self.p.auto_refill.show()
             time.sleep(2)
             self.p.auto_refill.hide()
         self.conn.close()
+
+    def refill_detail(self):
+        self.c.execute(f'select 주문번호, 내역, 시간 from finance where 지출 != 0')
+        refill_list = self.c.fetchall()
+        print(refill_list)
+        self.p.inventorylist_2.setRowCount(len(refill_list))
+        self.p.inventorylist_2.setColumnCount(len(refill_list[0]))
+        self.p.inventorylist_2.setHorizontalHeaderLabels(['주문번호', '내역', '시간'])
+        for i in range(len(refill_list)):
+            for j in range(len(refill_list[i])):
+                self.p.inventorylist_2.setItem(i, j, QTableWidgetItem(str(refill_list[i][j])))
+        print("vnrgaownxg")
 
     # 문의사항(댓글) 자동등록 기능
     def comment(self):
