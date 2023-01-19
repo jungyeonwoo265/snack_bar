@@ -32,7 +32,7 @@
     <string notr="true"/>
    </property>
    <property name="currentIndex">
-    <number>8</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="page">
     <widget class="QLabel" name="label">
@@ -1394,6 +1394,12 @@ border-style: solid;
        <height>421</height>
       </rect>
      </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
     </widget>
     <widget class="QPushButton" name="back_button">
      <property name="geometry">
@@ -1452,6 +1458,12 @@ color:white;
        <height>421</height>
       </rect>
      </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
     </widget>
     <widget class="QLabel" name="label_18">
      <property name="geometry">
@@ -1683,6 +1695,12 @@ border-style: solid;
        <height>192</height>
       </rect>
      </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
     </widget>
    </widget>
    <widget class="QWidget" name="page_8">
@@ -1773,6 +1791,12 @@ border-style: solid;
        <height>471</height>
       </rect>
      </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
     </widget>
     <widget class="QPushButton" name="logout_manager_button">
      <property name="geometry">
@@ -1904,7 +1928,7 @@ color:white;
       <set>QAbstractItemView::NoEditTriggers</set>
      </property>
      <attribute name="horizontalHeaderVisible">
-      <bool>true</bool>
+      <bool>false</bool>
      </attribute>
      <attribute name="horizontalHeaderCascadingSectionResizes">
       <bool>false</bool>
@@ -1916,7 +1940,7 @@ color:white;
       <bool>false</bool>
      </attribute>
      <attribute name="horizontalHeaderStretchLastSection">
-      <bool>false</bool>
+      <bool>true</bool>
      </attribute>
     </widget>
     <widget class="QLineEdit" name="manager_line_add">
@@ -2045,6 +2069,12 @@ color:white;
        <height>401</height>
       </rect>
      </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
     </widget>
     <widget class="QLineEdit" name="food_name">
      <property name="geometry">
@@ -2205,6 +2235,12 @@ border-style: solid;
        <height>241</height>
       </rect>
      </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
     </widget>
     <widget class="QPushButton" name="confirm_btn">
      <property name="geometry">
@@ -2241,6 +2277,12 @@ border-style: solid;
        <height>391</height>
       </rect>
      </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
     </widget>
     <widget class="QPushButton" name="cancel_btn">
      <property name="geometry">

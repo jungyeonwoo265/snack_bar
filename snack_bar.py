@@ -20,7 +20,7 @@ matplotlib.rc('font', family='Malgun Gothic')
 # db 연결용 정보
 hos = 'localhost'
 use = 'root'
-pw = 'qwer1234'
+pw = '0000'
 
 
 class Thread(QThread):
