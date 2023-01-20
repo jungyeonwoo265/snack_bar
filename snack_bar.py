@@ -20,7 +20,7 @@ matplotlib.rc('font', family='Malgun Gothic')
 # db 연결용 정보
 hos = 'localhost'
 use = 'root'
-pw = 'qwer1234'
+pw = '0000'
 
 
 class Thread(QThread):
@@ -30,6 +30,7 @@ class Thread(QThread):
         self.requesr_list = list()
         self.show_question()
         self.p.show_inventory()
+        self.p.max_sales()
 
     def open_db(self):
         self.conn = p.connect(host=hos, user=use, password=pw, db='snack', charset='utf8')
@@ -59,6 +60,7 @@ class Thread(QThread):
                 self.conn.commit()
         self.conn.close()
         self.ordering()
+        self.p.max_sales()
 
     # 식재료 자동 구매 기능
     def ordering(self):
@@ -74,7 +76,6 @@ class Thread(QThread):
                 self.c.execute(f'update inventory set 수량 = 수량 + 구매량 where 재료 ="{i[0]}";')
                 article_list.append([i[0], i[2]])
                 self.conn.commit()
-        self.p.max_sales()
         # 재무표에 구매 list 추가
         if article_list:
             for i in article_list:
@@ -85,7 +86,6 @@ class Thread(QThread):
                 self.conn.commit()
             # 재고현황 및 재료 발주내역 수정
             self.p.show_inventory()
-            self.p.max_sales()
             self.refill_detail()
             # 재료 구매 알람
             self.p.auto_refill.show()
@@ -189,8 +189,6 @@ class Thread(QThread):
             self.income()
             # 재고 차감
             self.deduction()
-            # 최대 판매 가능 수량
-            self.p.max_sales()
             # 문의사항 등록
             self.comment()
             num = random.randrange(10, 15)
@@ -457,7 +455,7 @@ class WindowClass(QMainWindow, snack_bar):
     def show_inventory(self):
         head = ['재료', '수량', '단위']
         self.inventorylist.setRowCount(0)
-        self.inventorylist.setColumnCount(0)
+        # self.inventorylist.setColumnCount(0)
         self.open_db()
         self.c.execute(f"select 재료,수량,단위 from inventory;")
         inven = self.c.fetchall()
@@ -976,9 +974,10 @@ class WindowClass(QMainWindow, snack_bar):
             for j in range(len(need_ingredient[0]) - 1):
                 self.ingredient_list.setItem(i, j, QTableWidgetItem(str(need_ingredient[i][j + 1])))
 
+    # 상품 최대 생산 수량 확인
     def max_sales(self):
         self.maximum_list.setRowCount(0)
-        self.maximum_list.setColumnCount(0)
+        # self.maximum_list.setColumnCount(0)
         self.open_db()
         self.c.execute(f'select 상품명, min(b.수량 div a.수량) as 최대생산량  from bom a left join inventory b on a.재료 =b.재료 group by 상품명;')
         max_number = self.c.fetchall()
