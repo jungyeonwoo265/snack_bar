@@ -30,6 +30,7 @@ class Thread(QThread):
         self.p = windowclass
         self.requesr_list = list()
         self.show_question()
+        # self.refill_detail()
         self.p.show_inventory()
         self.p.max_sales()
 
@@ -96,7 +97,8 @@ class Thread(QThread):
 
     # 재료 발주 내역 보여 주기
     def refill_detail(self):
-        self.c.execute(f'select 주문번호, 내역, 시간 from finance where 지출 != 0')
+        self.p.inventorylist_2.setRowCount(0)
+        self.c.execute(f'select 주문번호, 내역, 시간 from finance where 지출 != 0 and 시간 > curdate() order by 주문번호 desc;')
         refill_list = self.c.fetchall()
         self.p.inventorylist_2.setRowCount(len(refill_list))
         self.p.inventorylist_2.setColumnCount(len(refill_list[0]))
